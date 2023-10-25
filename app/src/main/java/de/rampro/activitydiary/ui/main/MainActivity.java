@@ -120,8 +120,19 @@ public class MainActivity extends BaseActivity implements
     private String filter = "";
     private int searchRowCount, normalRowCount;
     private FloatingActionButton fabNoteEdit;
+    private FloatingActionButton weathernote;
+    private FloatingActionButton emotion;
+    private FloatingActionButton emotionchange;
+    private FloatingActionButton emotionhappy;
+    private FloatingActionButton emotionsad;
+    private FloatingActionButton emotionangry;
+    private FloatingActionButton addfeatures;
     private FloatingActionButton fabAttachPicture;
+    private FloatingActionButton wea_sunny;
+    private FloatingActionButton wea_windy;
+    private FloatingActionButton wea_rainy;
     private SearchView searchView;
+    private FloatingActionButton weatherchange;
     private MenuItem searchMenuItem;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -132,6 +143,17 @@ public class MainActivity extends BaseActivity implements
             headerView.setVisibility(View.GONE);
             fabNoteEdit.hide();
             fabAttachPicture.hide();
+            addfeatures.hide();
+            weathernote.hide();
+            emotion.hide();
+            wea_rainy.setVisibility(View.INVISIBLE);
+            wea_sunny.setVisibility(View.INVISIBLE);
+            wea_windy.setVisibility(View.INVISIBLE);
+            weatherchange.setVisibility(View.INVISIBLE ) ;
+            emotionhappy.setVisibility(View.INVISIBLE);
+            emotionsad.setVisibility(View.INVISIBLE);
+            emotionangry.setVisibility(View.INVISIBLE);
+            emotionchange.setVisibility(View.INVISIBLE ) ;
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             ((StaggeredGridLayoutManager)selectRecyclerView.getLayoutManager()).setSpanCount(searchRowCount);
 
@@ -142,6 +164,10 @@ public class MainActivity extends BaseActivity implements
             headerView.setVisibility(View.VISIBLE);
             fabNoteEdit.show();
             fabAttachPicture.show();
+            addfeatures.show();
+            weathernote.show();
+            emotion.show();
+
         }
 
     }
@@ -160,6 +186,7 @@ public class MainActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         SettingsActivity.updateLanguage(getResources());
         super.onCreate(savedInstanceState);
+
 
         viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
 
@@ -212,9 +239,20 @@ public class MainActivity extends BaseActivity implements
         getSupportActionBar().setSubtitle(getResources().getString(R.string.activity_subtitle_main));
 
         likelyhoodSort();
-
         fabNoteEdit = (FloatingActionButton) findViewById(R.id.fab_edit_note);
         fabAttachPicture = (FloatingActionButton) findViewById(R.id.fab_attach_picture);
+        weathernote = (FloatingActionButton) findViewById(R.id.note_weather);
+        emotion = (FloatingActionButton) findViewById(R.id.emotion);
+        addfeatures = (FloatingActionButton) findViewById(R.id.char_add);
+        emotionangry  = findViewById(R.id.emo_angry );
+        emotionhappy  = findViewById(R.id.emo_happy );
+        emotionsad  = findViewById(R.id.emo_sad );
+        emotionchange =findViewById(R.id.emotionchange);
+        weatherchange = findViewById(R.id.note_weather1);
+        wea_rainy  = findViewById(R.id.rainy );
+        wea_sunny = findViewById(R.id.sunny);
+        wea_windy = findViewById(R.id.windy);
+
 
         fabNoteEdit.setOnClickListener(v -> {
             // Handle the click on the FAB
@@ -226,7 +264,13 @@ public class MainActivity extends BaseActivity implements
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
             }
         });
-
+        if(weatherchange.getVisibility() == View.VISIBLE){
+            weathernote.setVisibility(View.INVISIBLE);
+            fabNoteEdit.hide();
+            fabAttachPicture.hide();
+            addfeatures.hide();
+            emotion.hide();
+        }
         fabAttachPicture.setOnClickListener(v -> {
             // Handle the click on the FAB
             if(viewModel.currentActivity() != null) {
@@ -278,6 +322,98 @@ public class MainActivity extends BaseActivity implements
         }
 // TODO: this is crazy to call onActivityChagned here, as it reloads the statistics and refills the viewModel... Completely against the idea of the viewmodel :-(
         onActivityChanged(); /* do this at the very end to ensure that no Loader finishes its data loading before */
+        weathernote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                wea_rainy.setVisibility(View.VISIBLE);
+                wea_sunny.setVisibility(View.VISIBLE);
+                wea_windy.setVisibility(View.VISIBLE);
+                weatherchange.setVisibility(View.VISIBLE ) ;
+                weathernote.setVisibility(View.INVISIBLE);
+                fabNoteEdit.hide();
+                fabAttachPicture.hide();
+                addfeatures.hide();
+                emotion.hide();}
+        });
+        wea_sunny.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                if(viewModel.currentActivity() != null) {
+                    viewModel.mweather.setValue(getResources().getString(R.string.weathersunny) );
+                }}});
+        wea_windy.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                if(viewModel.currentActivity() != null) {
+                    viewModel.mweather.setValue(getResources().getString(R.string.weatherwindy) );
+                }}});
+        wea_rainy.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                if(viewModel.currentActivity() != null) {
+                    viewModel.mweather.setValue(getResources().getString(R.string.weatherrainy) );
+                }}});
+        weatherchange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                wea_rainy.setVisibility(View.INVISIBLE);
+                wea_sunny.setVisibility(View.INVISIBLE);
+                wea_windy.setVisibility(View.INVISIBLE);
+                weatherchange.setVisibility(View.INVISIBLE ) ;
+                weathernote.setVisibility(View.VISIBLE);
+                fabNoteEdit.show();
+                fabAttachPicture.show();
+                addfeatures.show();
+                emotion.show();
+
+            }
+        });
+        emotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                emotionangry.setVisibility(View.VISIBLE);
+                emotionchange.setVisibility(View.VISIBLE);
+                emotionhappy.setVisibility(View.VISIBLE);
+                emotionsad.setVisibility(View.VISIBLE ) ;
+                emotion.setVisibility(View.INVISIBLE);
+                fabNoteEdit.hide();
+                fabAttachPicture.hide();
+                addfeatures.hide();
+                weathernote.hide();}
+
+
+        });
+        emotionangry.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                if(viewModel.currentActivity() != null) {
+                    viewModel.mweather.setValue(getResources().getString(R.string.weathersunny) );
+                }}});
+        emotionsad.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                if(viewModel.currentActivity() != null) {
+                    viewModel.mweather.setValue(getResources().getString(R.string.weatherwindy) );
+                }}});
+        emotionhappy.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                if(viewModel.currentActivity() != null) {
+                    viewModel.mweather.setValue(getResources().getString(R.string.weatherrainy) );
+                }}});
+        emotionchange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                emotionsad.setVisibility(View.INVISIBLE);
+                emotionhappy.setVisibility(View.INVISIBLE);
+                emotionangry.setVisibility(View.INVISIBLE);
+                emotionchange.setVisibility(View.INVISIBLE ) ;
+                emotion.setVisibility(View.VISIBLE);
+                fabNoteEdit.show();
+                fabAttachPicture.show();
+                addfeatures.show();
+                weathernote.show();
+
+            }
+        });
     }
 
     private File createImageFile() throws IOException {
@@ -371,6 +507,19 @@ public class MainActivity extends BaseActivity implements
             searchView.setQuery("", false);
             searchView.setIconified(true);
 
+            if(weatherchange.getVisibility()== View.VISIBLE){
+                weathernote.setVisibility(View.INVISIBLE);
+                fabNoteEdit.hide();
+                fabAttachPicture.hide();
+                addfeatures.hide();
+                emotion.hide();
+            }
+            if(emotionchange.getVisibility()== View.VISIBLE){
+                weathernote.setVisibility(View.INVISIBLE);
+                fabNoteEdit.hide();
+                fabAttachPicture.hide();
+                addfeatures.hide();
+            }
 
             SpannableStringBuilder snackbarText = new SpannableStringBuilder();
             snackbarText.append(newAct.getName());
@@ -391,6 +540,7 @@ public class MainActivity extends BaseActivity implements
                 public void onClick(View v) {
                     Log.v(TAG, "UNDO Activity Selection");
                     ActivityHelper.helper.undoLastActivitySelection();
+
                 }
             });
             undoSnackBar.show();
@@ -401,6 +551,7 @@ public class MainActivity extends BaseActivity implements
     }
 
     public void onActivityChanged(){
+
         DiaryActivity newAct = ActivityHelper.helper.getCurrentActivity();
         viewModel.mCurrentActivity.setValue(newAct);
 

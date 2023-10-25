@@ -18,7 +18,12 @@
  */
 
 package de.rampro.activitydiary.ui.generic;
-
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.content.Context;
@@ -34,12 +39,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import de.rampro.activitydiary.ActivityDiaryApplication;
 import de.rampro.activitydiary.R;
 import de.rampro.activitydiary.db.ActivityDiaryContract;
 import de.rampro.activitydiary.helpers.GraphicsHelper;
+import de.rampro.activitydiary.ui.main.MainActivity ;
 
 public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailViewHolders> implements DetailViewHolders.SelectListener {
     private static final String TAG = DetailRecyclerViewAdapter.class.getName();
@@ -51,7 +58,12 @@ public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailViewHo
     }
 
     private QHandler mQHandler = new QHandler();
-
+    private FloatingActionButton fabNoteEdit;
+    private FloatingActionButton weathernote;
+    private FloatingActionButton emotion;
+    private FloatingActionButton weathernotechange;
+    private FloatingActionButton addfeatures;
+    private FloatingActionButton fabAttachPicture;
     private static int lastAdapterId = 0;
 
     private Cursor mCursor;
@@ -185,6 +197,7 @@ public class DetailRecyclerViewAdapter extends RecyclerView.Adapter<DetailViewHo
         intent.setDataAndType(i, "image/*");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         mContext.startActivity(intent);
+
 
     }
 

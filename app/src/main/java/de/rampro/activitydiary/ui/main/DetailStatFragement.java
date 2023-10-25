@@ -20,7 +20,7 @@
 package de.rampro.activitydiary.ui.main;
 
 import android.app.Activity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -65,7 +65,7 @@ public class DetailStatFragement extends Fragment {
 
         view.findViewById(R.id.detail_content).setOnClickListener(headerClickHandler);
 
-        viewModel = ViewModelProviders.of(getActivity()/*, viewModelFactory TODO */).get(DetailViewModel.class);
+        viewModel = new ViewModelProvider(getActivity()/*, viewModelFactory TODO */).get(DetailViewModel.class);
 
         binding.setViewModel(viewModel);
         // Specify the current activity as the lifecycle owner.

@@ -184,9 +184,9 @@
     <string name="week_format">yyyy \'Week\' ww</string>
     <string name="month_format">MMMM yyyy</string>
     <string name="year_format">yyyy</string>
-    <string name="today">Today</string>
-    <string name="yesterday">Yesterday</string>
-    <string name="lastWeek">Last week</string>
+    <string name="today">今天</string>
+    <string name="yesterday">昨天</string>
+    <string name="lastWeek">上周</string>
     <string name="crash_dialog_text">强制停止应用程序时发生意外错误。请通过向我们发送错误数据来帮助我们解决此问题，您只需单击“确定”。</string>
     <string name="crash_dialog_comment_prompt">您可以加入关于下面问题的意见:</string>
     <string name="crash_dialog_ok_toast">非常感谢。请在查看内容后发送准备好的电子邮件。</string>
@@ -227,6 +227,9 @@
     <string name="privacy_contact_title">联系我们</string>
     <string name="privacy_contact_text">如果您对我们的隐私政策有任何疑惑，请联系我们:</string>
     <string name="setting_silent_reconfication_summary_active" translatable="false">修改通知文本时无铃声</string>
+    <string name="weathersunny">天气：晴天</string>
+    <string name="weatherwindy">天气：阵风</string>
+    <string name="weatherrainy">天气：雨天</string>
     <plurals name="seconds_short">
         <item quantity="one">%d sec</item>
         <item quantity="other">%d sec</item>

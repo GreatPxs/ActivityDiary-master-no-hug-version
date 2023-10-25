@@ -36,7 +36,9 @@
     <string name="about_text_cont_2">We are looking forward to mention your name in this list, too.</string>
     <string name="about_text_lib_h">Libraries</string>
     <string name="about_text_lib">The following libraries are used by this application and licensed under the named licenses:</string>
-
+    <string name="weathersunny">weather:Sunny</string>
+    <string name="weatherwindy">weather:Windy</string>
+    <string name="weatherrainy">weather:Rainy</string>
     <string name="contributors" translatable="false"><![CDATA[
         <p><a href="https://www.raphael-mack.de">Raphael Mack</a> (developer)</p>
         <p><a href="https://web.facebook.com/profile.php?id=100011025332183">Murtala Umar</a> (Indonesian translation)</p>

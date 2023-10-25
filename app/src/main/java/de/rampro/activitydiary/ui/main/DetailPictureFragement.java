@@ -19,7 +19,7 @@
 
 package de.rampro.activitydiary.ui.main;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,7 +54,7 @@ public class DetailPictureFragement extends Fragment implements LoaderManager.Lo
 
         View view = inflater.inflate(R.layout.fragment_detail_pictures, container, false);
 
-        viewModel = ViewModelProviders.of(getActivity()).get(DetailViewModel.class);
+        viewModel = new ViewModelProvider(getActivity()).get(DetailViewModel.class);
 
         detailRecyclerView = view.findViewById(R.id.picture_recycler);
 
@@ -72,7 +72,8 @@ public class DetailPictureFragement extends Fragment implements LoaderManager.Lo
     }
 
     public void reload() {
-        getActivity().getSupportLoaderManager().restartLoader(0,null,this);
+        LoaderManager loaderManager = LoaderManager.getInstance(getActivity());
+        loaderManager.restartLoader(0, null, this);
     }
 
 

@@ -70,7 +70,8 @@ public class StatisticsActivity extends BaseActivity implements LoaderManager.Lo
             ActivityDiaryContract.DiaryStats.NAME,
             ActivityDiaryContract.DiaryStats.COLOR,
             ActivityDiaryContract.DiaryStats.PORTION,
-            ActivityDiaryContract.DiaryStats.DURATION
+            ActivityDiaryContract.DiaryStats.DURATION,
+            ActivityDiaryContract.DiaryStats.WEATHER
     };
     private PieChart chart;
 

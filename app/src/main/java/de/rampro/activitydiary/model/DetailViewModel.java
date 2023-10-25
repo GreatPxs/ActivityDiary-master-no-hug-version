@@ -35,7 +35,7 @@ public class DetailViewModel extends ViewModel {
     public MutableLiveData<String> mTotalToday;
     public MutableLiveData<String> mTotalWeek;
     public MutableLiveData<String> mTotalMonth;
-
+    public MutableLiveData<String> mweather;
     public MutableLiveData<DiaryActivity> mCurrentActivity;
     /* TODO: note and starttime from ActivityHelper to here, or even use directly the ContentProvider
      * register a listener to get updates directly from the ContentProvider */
@@ -45,7 +45,7 @@ public class DetailViewModel extends ViewModel {
     private Uri mDiaryUri;
 
     public DetailViewModel()
-    {
+    {   mweather=new MutableLiveData<>();
         mNote = new MutableLiveData<>();
         mDuration = new MutableLiveData<>();
         mAvgDuration = new MutableLiveData<>();
@@ -60,7 +60,7 @@ public class DetailViewModel extends ViewModel {
     public LiveData<String> note() {
         return mNote;
     }
-
+    public LiveData<String> weather() {return mweather;}
     public LiveData<String> duration() {
         return mDuration;
     }

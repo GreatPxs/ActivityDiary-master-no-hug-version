@@ -403,7 +403,7 @@ public class ActivityDiaryContract {
          * <P>Type: LONG</P>
          */
         public static final String DURATION = "duration";
-
+        public static final String WEATHER="weather";
         /**
          * The portion in percent, not allowed to be used in conditions
          * <P>Type: FLOAT</P>

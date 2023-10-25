@@ -48,7 +48,7 @@ class DetailViewHolders extends RecyclerView.ViewHolder implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        final int position = getAdapterPosition();
+        final int position = getAbsoluteAdapterPosition();
         if(position != RecyclerView.NO_POSITION) {
             mListener.onDetailItemClick(position);
         }
@@ -56,7 +56,7 @@ class DetailViewHolders extends RecyclerView.ViewHolder implements View.OnClickL
 
     @Override
     public boolean onLongClick(View v) {
-        final int position = getAdapterPosition();
+        final int position = getAbsoluteAdapterPosition();
         if(position != RecyclerView.NO_POSITION) {
             return mListener.onDetailItemLongClick(position);
         }

@@ -303,7 +303,7 @@ public class EditActivity extends BaseActivity implements ActivityHelper.DataCha
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             linkCol = getResources().getColor(R.color.colorAccent, null);
         }else{
-            linkCol = getResources().getColor(R.color.colorAccent);
+            linkCol = getResources().getColor(R.color.colorAccent,null);
         }
         setCheckState(CHECK_STATE_CHECKING);
 

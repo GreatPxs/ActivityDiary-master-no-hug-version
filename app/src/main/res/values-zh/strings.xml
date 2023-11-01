@@ -230,6 +230,9 @@
     <string name="weathersunny">天气：晴天</string>
     <string name="weatherwindy">天气：阵风</string>
     <string name="weatherrainy">天气：雨天</string>
+    <string name="emotionhappy">心情：开心</string>
+    <string name="emotionsad">心情：悲伤</string>
+    <string name="emotionangry">心情：生气</string>
     <plurals name="seconds_short">
         <item quantity="one">%d sec</item>
         <item quantity="other">%d sec</item>

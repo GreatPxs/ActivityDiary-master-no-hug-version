@@ -404,6 +404,7 @@ public class ActivityDiaryContract {
          */
         public static final String DURATION = "duration";
         public static final String WEATHER="weather";
+        public static final String EMOTION="emotion";
         /**
          * The portion in percent, not allowed to be used in conditions
          * <P>Type: FLOAT</P>

@@ -386,17 +386,17 @@ public class MainActivity extends BaseActivity implements
         emotionangry.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 if(viewModel.currentActivity() != null) {
-                    viewModel.mweather.setValue(getResources().getString(R.string.weathersunny) );
+                    viewModel.memotion.setValue(getResources().getString(R.string.emotionangry) );
                 }}});
         emotionsad.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 if(viewModel.currentActivity() != null) {
-                    viewModel.mweather.setValue(getResources().getString(R.string.weatherwindy) );
+                    viewModel.memotion.setValue(getResources().getString(R.string.emotionsad) );
                 }}});
         emotionhappy.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 if(viewModel.currentActivity() != null) {
-                    viewModel.mweather.setValue(getResources().getString(R.string.weatherrainy) );
+                    viewModel.memotion.setValue(getResources().getString(R.string.emotionhappy) );
                 }}});
         emotionchange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -588,6 +588,8 @@ public class MainActivity extends BaseActivity implements
             findViewById(R.id.activity_background).setBackgroundColor(viewModel.currentActivity().getValue().getColor());
             aName.setTextColor(GraphicsHelper.textColorOnBackground(viewModel.currentActivity().getValue().getColor()));
             viewModel.mNote.setValue(ActivityHelper.helper.getCurrentNote());
+            viewModel.mweather.setValue(ActivityHelper.helper.getCurrentWeather());
+            viewModel.memotion.setValue(ActivityHelper.helper.getCurrentEmotion());
         }else{
             int col;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -600,6 +602,8 @@ public class MainActivity extends BaseActivity implements
             aName.setTextColor(GraphicsHelper.textColorOnBackground(col));
             viewModel.mDuration.setValue("-");
             viewModel.mNote.setValue("");
+            viewModel.mweather.setValue("");
+            viewModel.memotion.setValue("");
         }
         selectorLayoutManager.scrollToPosition(0);
     }

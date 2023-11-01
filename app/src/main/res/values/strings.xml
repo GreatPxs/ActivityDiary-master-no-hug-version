@@ -39,6 +39,9 @@
     <string name="weathersunny">weather:Sunny</string>
     <string name="weatherwindy">weather:Windy</string>
     <string name="weatherrainy">weather:Rainy</string>
+    <string name="emotionhappy">emotion:Happy</string>
+    <string name="emotionsad">emotion:Sad</string>
+    <string name="emotionangry">emotion:Angry</string>
     <string name="contributors" translatable="false"><![CDATA[
         <p><a href="https://www.raphael-mack.de">Raphael Mack</a> (developer)</p>
         <p><a href="https://web.facebook.com/profile.php?id=100011025332183">Murtala Umar</a> (Indonesian translation)</p>

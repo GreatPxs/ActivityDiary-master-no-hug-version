@@ -119,6 +119,8 @@ public class ActivityHelper extends AsyncQueryHandler{
     private Date mCurrentActivityStartTime;
     private @Nullable Uri mCurrentDiaryUri;
     private /* @NonNull */ String mCurrentNote;
+    private /* @NonNull */ String mCurrentWeather;
+    private /* @NonNull */ String mCurrentEmotion;
     private Condition[] conditions;
 
     private DetailViewModel viewModel;
@@ -398,6 +400,8 @@ public class ActivityHelper extends AsyncQueryHandler{
     }
     public Date getCurrentActivityStartTime() { return mCurrentActivityStartTime;}
     public String getCurrentNote() { return mCurrentNote;}
+    public String getCurrentWeather() { return mCurrentWeather;}
+    public String getCurrentEmotion() { return mCurrentEmotion;}
     public void setCurrentNote(String str) { mCurrentNote = str;}
 
     public void setCurrentActivity(@Nullable DiaryActivity activity){

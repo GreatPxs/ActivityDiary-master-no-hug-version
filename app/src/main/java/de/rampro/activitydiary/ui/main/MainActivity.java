@@ -336,20 +336,31 @@ public class MainActivity extends BaseActivity implements
                 addfeatures.hide();
                 emotion.hide();}
         });
-        wea_sunny.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                if(viewModel.currentActivity() != null) {
+        wea_sunny.setOnClickListener(v -> {
+
+             if(viewModel.currentActivity().getValue() != null) {
                     viewModel.mweather.setValue(getResources().getString(R.string.weathersunny) );
-                }}});
+                 NoteEditDialog dialog = new NoteEditDialog();
+                 viewModel.mNote.setValue(getResources().getString(R.string.weathersunny));
+                 dialog.setText(viewModel.mNote.getValue());
+
+                }else{
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
+                }
+            });
         wea_windy.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                if(viewModel.currentActivity() != null) {
+                if(viewModel.currentActivity() .getValue() != null) {
                     viewModel.mweather.setValue(getResources().getString(R.string.weatherwindy) );
+                }else{
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
                 }}});
         wea_rainy.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                if(viewModel.currentActivity() != null) {
+                if(viewModel.currentActivity().getValue()  != null) {
                     viewModel.mweather.setValue(getResources().getString(R.string.weatherrainy) );
+                }else{
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
                 }}});
         weatherchange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,18 +396,27 @@ public class MainActivity extends BaseActivity implements
         });
         emotionangry.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                if(viewModel.currentActivity() != null) {
+                if(viewModel.currentActivity() .getValue() != null) {
                     viewModel.memotion.setValue(getResources().getString(R.string.emotionangry) );
+                    NoteEditDialog dialog = new NoteEditDialog();
+                    viewModel.mNote.setValue(getResources().getString(R.string.emotionangry ));
+                    dialog.setText(viewModel.mNote.getValue());
+                }else{
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
                 }}});
         emotionsad.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                if(viewModel.currentActivity() != null) {
+                if(viewModel.currentActivity() .getValue() != null) {
                     viewModel.memotion.setValue(getResources().getString(R.string.emotionsad) );
+                }else{
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
                 }}});
         emotionhappy.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                if(viewModel.currentActivity() != null) {
+                if(viewModel.currentActivity().getValue()  != null) {
                     viewModel.memotion.setValue(getResources().getString(R.string.emotionhappy) );
+                }else{
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
                 }}});
         emotionchange.setOnClickListener(new View.OnClickListener() {
             @Override

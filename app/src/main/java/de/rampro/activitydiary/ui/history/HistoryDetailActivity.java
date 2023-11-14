@@ -111,6 +111,8 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
     private Calendar end, storedEnd;
 
     private EditText mNote;
+    private EditText mWeather;
+    private EditText mEmotion;
     private TextInputLayout mNoteTIL;
     private View mBackground;
     private SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ActivityDiaryApplication.getAppContext());
@@ -184,6 +186,7 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
                         }else{
                             mIsCurrent = true;
                         }
+
 
                         if(!updateValues.containsKey(ActivityDiaryContract.Diary.NOTE)) {
                             mNote.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.NOTE)));

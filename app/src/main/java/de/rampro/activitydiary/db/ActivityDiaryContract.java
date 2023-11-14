@@ -196,6 +196,8 @@ public class ActivityDiaryContract {
          * <P>Type: TEXT</P>
          */
         String NOTE = "note";
+        String WEATHER="weather";
+        String EMOTION="emotion";
     }
 
     /* DiaryImage attachments for diary entries*/

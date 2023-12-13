@@ -72,6 +72,11 @@ public class LocalDBHelper extends SQLiteOpenHelper {
                 ActivityDiaryContract.DiaryActivity.TABLE_NAME +
                 "(" + ActivityDiaryContract.DiaryActivity.NAME + "," + ActivityDiaryContract.DiaryActivity.COLOR + ")" +
                 " VALUES " +
+                " ('打游戏', '" + Color.parseColor("#fbc02e ") + "');");
+        db.execSQL("INSERT INTO " +
+                ActivityDiaryContract.DiaryActivity.TABLE_NAME +
+                "(" + ActivityDiaryContract.DiaryActivity.NAME + "," + ActivityDiaryContract.DiaryActivity.COLOR + ")" +
+                " VALUES " +
                 " ('Cleaning', '" + Color.parseColor("#CFD8DC") + "');");
         db.execSQL("INSERT INTO " +
                 ActivityDiaryContract.DiaryActivity.TABLE_NAME +

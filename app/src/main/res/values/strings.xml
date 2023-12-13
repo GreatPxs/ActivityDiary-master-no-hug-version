@@ -37,6 +37,8 @@
     <string name="about_text_lib_h">Libraries</string>
     <string name="about_text_lib">The following libraries are used by this application and licensed under the named licenses:</string>
     <string name="weathersunny">weather:Sunny</string>
+    <string name="desc_wea_hint">Weather</string>
+    <string name="desc_emo_hint">Emotion</string>
     <string name="weatherwindy">weather:Windy</string>
     <string name="weatherrainy">weather:Rainy</string>
     <string name="emotionhappy">emotion:Happy</string>

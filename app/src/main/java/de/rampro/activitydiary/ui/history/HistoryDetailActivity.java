@@ -280,7 +280,8 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
 
         mNoteTIL = (TextInputLayout) contentView.findViewById(R.id.edit_activity_note_til);
         mNote = (EditText) contentView.findViewById(R.id.edit_activity_note);
-
+        mWeather=(EditText)contentView.findViewById(R.id.edit_weaemo);
+        mEmotion=(EditText)contentView.findViewById(R.id.edit_weaemo1);
         mNote.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -296,6 +297,40 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
             public void afterTextChanged(Editable s) {
                 String ss = s.toString();
                 updateValues.put(ActivityDiaryContract.Diary.NOTE, ss);
+            }
+        });
+        mWeather.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String ss = s.toString();
+                updateValues.put(ActivityDiaryContract.Diary.WEATHER, ss);
+            }
+        });
+        mEmotion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // empty
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String ss = s.toString();
+                updateValues.put(ActivityDiaryContract.Diary.EMOTION, ss);
             }
         });
 

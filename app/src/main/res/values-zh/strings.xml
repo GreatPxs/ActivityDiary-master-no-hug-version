@@ -233,6 +233,12 @@
     <string name="emotionhappy">心情：开心</string>
     <string name="emotionsad">心情：悲伤</string>
     <string name="emotionangry">心情：生气</string>
+    <string name="action_go">发送</string>
+    <string name="action_try">让我们愉快地开始吧！</string>
+    <string name="summary1">用Gemini总结文章</string>
+    <string name="photo1">用Gemini分析图片</string>
+    <string name="chat1">用Gemini开始对话</string>
+    <string name="chat11">点击下方按钮即可激情对聊</string>
     <plurals name="seconds_short">
         <item quantity="one">%d sec</item>
         <item quantity="other">%d sec</item>

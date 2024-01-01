@@ -55,6 +55,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import de.rampro.activitydiary.ActivityDiaryApplication;
 import de.rampro.activitydiary.R;
@@ -438,24 +439,32 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
                             // update also the predecessor
                             ContentValues updateEndTime = new ContentValues();
                             updateEndTime.put(ActivityDiaryContract.Diary.END, updateValues.getAsString(ActivityDiaryContract.Diary.START));
-                            mQHandler.startUpdate(UPDATE_PRE, null,
+                          if (storedStart != null) {
+                                mQHandler.startUpdate(UPDATE_PRE, null,
                                     ActivityDiaryContract.Diary.CONTENT_URI,
                                     updateEndTime,
                                     ActivityDiaryContract.Diary.END + "=?",
                                     new String[]{Long.toString(storedStart.getTimeInMillis())});
-                            mUpdatePending[UPDATE_PRE] = true;
+                            mUpdatePending[UPDATE_PRE] = true;}
+                            if (storedStart == null) {
+                                storedStart = Calendar.getInstance();
 
+                            }
                         }
                         if (updateValues.containsKey(ActivityDiaryContract.Diary.END)) {
                             // update also the successor
                             ContentValues updateStartTime = new ContentValues();
                             updateStartTime.put(ActivityDiaryContract.Diary.START, updateValues.getAsString(ActivityDiaryContract.Diary.END));
-                            mQHandler.startUpdate(UPDATE_SUCC, null,
+                            if (storedEnd != null) {
+                                mQHandler.startUpdate(UPDATE_SUCC, null,
                                     ActivityDiaryContract.Diary.CONTENT_URI,
                                     updateStartTime,
                                     ActivityDiaryContract.Diary.START + "=?",
                                     new String[]{Long.toString(storedEnd.getTimeInMillis())});
-                            mUpdatePending[UPDATE_SUCC] = true;
+                            mUpdatePending[UPDATE_SUCC] = true;}
+                        }if (storedEnd == null) {
+                            storedEnd = Calendar.getInstance();
+
                         }
                     }
                 } else {

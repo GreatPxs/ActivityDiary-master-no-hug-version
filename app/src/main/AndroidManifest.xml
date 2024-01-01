@@ -24,6 +24,7 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- for photo storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -87,6 +88,8 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
+        <activity android:name="com.google.ai.sample.MainActivity"
+            android:label="chat" />
         <activity android:name=".ui.generic.AboutActivity"
             android:label="@string/activity_title_about" />
         <activity android:name=".ui.generic.PrivacyPolicyActivity"

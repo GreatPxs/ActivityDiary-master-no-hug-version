@@ -155,7 +155,7 @@ public class ActivityDiaryContract {
          * A projection of all columns in the diary table, including some joined colums from DiaryActivity.
          */
         public static final String[] PROJECTION_ALL =
-                {TABLE_NAME + "." + _ID, TABLE_NAME + "." + _DELETED, ACT_ID, NAME, COLOR, START, END, NOTE};
+                {TABLE_NAME + "." + _ID, TABLE_NAME + "." + _DELETED, ACT_ID, NAME, COLOR, START, END, NOTE,WEATHER,EMOTION};
 
         /**
          * The default sort order for the diary is time...

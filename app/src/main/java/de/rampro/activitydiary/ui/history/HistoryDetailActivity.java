@@ -90,6 +90,8 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
             ActivityDiaryContract.DiaryActivity.TABLE_NAME + "." + ActivityDiaryContract.DiaryActivity.COLOR,
             ActivityDiaryContract.Diary.TABLE_NAME + "." + ActivityDiaryContract.Diary._ID,
             ActivityDiaryContract.Diary.NOTE,
+            ActivityDiaryContract.Diary.WEATHER,
+            ActivityDiaryContract.Diary.EMOTION,
             ActivityDiaryContract.Diary.START,
             ActivityDiaryContract.Diary.END};
 
@@ -190,6 +192,12 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
 
                         if(!updateValues.containsKey(ActivityDiaryContract.Diary.NOTE)) {
                             mNote.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.NOTE)));
+                        }
+                        if(!updateValues.containsKey(ActivityDiaryContract.Diary.WEATHER)) {
+                            mWeather.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.WEATHER)));
+                        }
+                        if(!updateValues.containsKey(ActivityDiaryContract.Diary.EMOTION)) {
+                            mEmotion.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.EMOTION)));
                         }
                         mActivityName.setText(
                             cursor.getString(

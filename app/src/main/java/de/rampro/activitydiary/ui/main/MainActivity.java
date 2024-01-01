@@ -125,6 +125,7 @@ public class MainActivity extends BaseActivity implements
     private FloatingActionButton emotionchange;
     private FloatingActionButton emotionhappy;
     private FloatingActionButton emotionsad;
+    private FloatingActionButton chatai;
     private FloatingActionButton emotionangry;
     private FloatingActionButton addfeatures;
     private FloatingActionButton fabAttachPicture;
@@ -252,8 +253,14 @@ public class MainActivity extends BaseActivity implements
         wea_rainy  = findViewById(R.id.rainy );
         wea_sunny = findViewById(R.id.sunny);
         wea_windy = findViewById(R.id.windy);
-
-
+        chatai=findViewById(R.id.char_add);
+        chatai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( MainActivity.this, com.google.ai.sample.MainActivity.class);
+                startActivity(intent);
+            }
+        });
         fabNoteEdit.setOnClickListener(v -> {
             // Handle the click on the FAB
             if(viewModel.currentActivity().getValue() != null) {

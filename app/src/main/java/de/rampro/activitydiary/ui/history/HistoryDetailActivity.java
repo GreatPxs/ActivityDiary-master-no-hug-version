@@ -55,7 +55,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import de.rampro.activitydiary.ActivityDiaryApplication;
 import de.rampro.activitydiary.R;
@@ -91,8 +90,7 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
             ActivityDiaryContract.DiaryActivity.TABLE_NAME + "." + ActivityDiaryContract.DiaryActivity.COLOR,
             ActivityDiaryContract.Diary.TABLE_NAME + "." + ActivityDiaryContract.Diary._ID,
             ActivityDiaryContract.Diary.NOTE,
-            ActivityDiaryContract.Diary.WEATHER,
-            ActivityDiaryContract.Diary.EMOTION,
+
             ActivityDiaryContract.Diary.START,
             ActivityDiaryContract.Diary.END};
 
@@ -129,7 +127,7 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
         private TimePickerDialog.OnTimeSetListener listener;
 
         public void setData(TimePickerDialog.OnTimeSetListener listener,
-                           int hour, int minute){
+                            int hour, int minute){
             this.hour = hour;
             this.minute = minute;
             this.listener = listener;
@@ -194,19 +192,13 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
                         if(!updateValues.containsKey(ActivityDiaryContract.Diary.NOTE)) {
                             mNote.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.NOTE)));
                         }
-                        if(!updateValues.containsKey(ActivityDiaryContract.Diary.WEATHER)) {
-                            mWeather.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.WEATHER)));
-                        }
-                        if(!updateValues.containsKey(ActivityDiaryContract.Diary.EMOTION)) {
-                            mEmotion.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.EMOTION)));
-                        }
                         mActivityName.setText(
-                            cursor.getString(
-                                cursor.getColumnIndex(
-                                    ActivityDiaryContract.DiaryActivity.NAME)));
+                                cursor.getString(
+                                        cursor.getColumnIndex(
+                                                ActivityDiaryContract.DiaryActivity.NAME)));
 
                         mBackground.setBackgroundColor(cursor.getInt(cursor.getColumnIndex(
-                                    ActivityDiaryContract.DiaryActivity.COLOR)));
+                                ActivityDiaryContract.DiaryActivity.COLOR)));
 
                         if(diaryEntryID == -1){
                             diaryEntryID = cursor.getLong(cursor.getColumnIndex(ActivityDiaryContract.Diary._ID));
@@ -289,8 +281,7 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
 
         mNoteTIL = (TextInputLayout) contentView.findViewById(R.id.edit_activity_note_til);
         mNote = (EditText) contentView.findViewById(R.id.edit_activity_note);
-        mWeather=(EditText)contentView.findViewById(R.id.edit_weaemo);
-        mEmotion=(EditText)contentView.findViewById(R.id.edit_weaemo1);
+
         mNote.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -306,40 +297,6 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
             public void afterTextChanged(Editable s) {
                 String ss = s.toString();
                 updateValues.put(ActivityDiaryContract.Diary.NOTE, ss);
-            }
-        });
-        mWeather.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // empty
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // empty
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String ss = s.toString();
-                updateValues.put(ActivityDiaryContract.Diary.WEATHER, ss);
-            }
-        });
-        mEmotion.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // empty
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // empty
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String ss = s.toString();
-                updateValues.put(ActivityDiaryContract.Diary.EMOTION, ss);
             }
         });
 
@@ -439,32 +396,24 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
                             // update also the predecessor
                             ContentValues updateEndTime = new ContentValues();
                             updateEndTime.put(ActivityDiaryContract.Diary.END, updateValues.getAsString(ActivityDiaryContract.Diary.START));
-                          if (storedStart != null) {
-                                mQHandler.startUpdate(UPDATE_PRE, null,
+                            mQHandler.startUpdate(UPDATE_PRE, null,
                                     ActivityDiaryContract.Diary.CONTENT_URI,
                                     updateEndTime,
                                     ActivityDiaryContract.Diary.END + "=?",
                                     new String[]{Long.toString(storedStart.getTimeInMillis())});
-                            mUpdatePending[UPDATE_PRE] = true;}
-                            if (storedStart == null) {
-                                storedStart = Calendar.getInstance();
+                            mUpdatePending[UPDATE_PRE] = true;
 
-                            }
                         }
                         if (updateValues.containsKey(ActivityDiaryContract.Diary.END)) {
                             // update also the successor
                             ContentValues updateStartTime = new ContentValues();
                             updateStartTime.put(ActivityDiaryContract.Diary.START, updateValues.getAsString(ActivityDiaryContract.Diary.END));
-                            if (storedEnd != null) {
-                                mQHandler.startUpdate(UPDATE_SUCC, null,
+                            mQHandler.startUpdate(UPDATE_SUCC, null,
                                     ActivityDiaryContract.Diary.CONTENT_URI,
                                     updateStartTime,
                                     ActivityDiaryContract.Diary.START + "=?",
                                     new String[]{Long.toString(storedEnd.getTimeInMillis())});
-                            mUpdatePending[UPDATE_SUCC] = true;}
-                        }if (storedEnd == null) {
-                            storedEnd = Calendar.getInstance();
-
+                            mUpdatePending[UPDATE_SUCC] = true;
                         }
                     }
                 } else {

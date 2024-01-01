@@ -74,8 +74,7 @@ public class HistoryActivity extends BaseActivity implements
             ActivityDiaryContract.Diary.START,
             ActivityDiaryContract.Diary.END,
             ActivityDiaryContract.Diary.NOTE,
-            /*ActivityDiaryContract.Diary.WEATHER,
-            ActivityDiaryContract.Diary.EMOTION,*/
+
             ActivityDiaryContract.DiaryActivity.NAME,
             ActivityDiaryContract.DiaryActivity.COLOR
     };

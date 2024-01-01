@@ -347,9 +347,9 @@ public class MainActivity extends BaseActivity implements
 
              if(viewModel.currentActivity().getValue() != null) {
                     viewModel.mweather.setValue(getResources().getString(R.string.weathersunny) );
-                 NoteEditDialog dialog = new NoteEditDialog();
-                 viewModel.mNote.setValue(getResources().getString(R.string.weathersunny));
-                 dialog.setText(viewModel.mNote.getValue());
+                 WeatherEditDialog dialog = new WeatherEditDialog();
+                 viewModel.mweather.setValue(getResources().getString(R.string.weathersunny));
+                 dialog.setText(viewModel.mweather.getValue());
 
                 }else{
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
@@ -358,7 +358,9 @@ public class MainActivity extends BaseActivity implements
         wea_windy.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 if(viewModel.currentActivity() .getValue() != null) {
+                    WeatherEditDialog dialog = new WeatherEditDialog();
                     viewModel.mweather.setValue(getResources().getString(R.string.weatherwindy) );
+                    dialog.setText(viewModel.mweather.getValue());
                 }else{
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
                 }}});

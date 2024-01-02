@@ -49,23 +49,24 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
     private HistoryActivity mContext;
     private DataSetObserver mDataObserver;
     private int idRowIdx = -1, startRowIdx = -1,
-                nameRowIdx = -1, endRowIdx = -1,
-                colorRowIdx = -1, noteRowIdx = -1;
+            nameRowIdx = -1, endRowIdx = -1,
+            colorRowIdx = -1, noteRowIdx = -1;
 
     private List<HistoryViewHolders> mViewHolders;
 
     private SelectListener mListener;
-
+    private Calendar mSelectedDate;
     public interface SelectListener{
         void onItemClick(HistoryViewHolders viewHolder, int adapterPosition, int diaryID);
         boolean onItemLongClick(HistoryViewHolders viewHolder, int adapterPosition, int diaryID);
     }
 
-    public HistoryRecyclerViewAdapter(HistoryActivity context, SelectListener listener,  Cursor history){
+    public HistoryRecyclerViewAdapter(HistoryActivity context, SelectListener listener,  Cursor history, Calendar selectedDate){
         mCursor = history;
         mListener = listener;
         mContext = context;
         mViewHolders = new ArrayList<>(17);
+        mSelectedDate = (Calendar) selectedDate.clone();
 
         mDataObserver = new DataSetObserver(){
             public void onChanged() {
@@ -95,6 +96,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
 
     @Override
     public void onBindViewHolder(HistoryViewHolders holder, int position) {
+        //默认不显示header
         boolean showHeader = false;
         String header = "";
 
@@ -102,8 +104,13 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
 
+        //起始时间
         Date start = new Date(mCursor.getLong(startRowIdx));
         Date end;
+        //if (true) {
+        //    return;
+        //}
+
         String name = mCursor.getString(nameRowIdx);
         int color = mCursor.getInt(colorRowIdx);
 
@@ -112,12 +119,13 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
 
         holder.setDiaryEntryID(mCursor.getInt(idRowIdx));
 
+        //结束时间
         if(mCursor.isNull(endRowIdx)) {
             end = null;
         }else {
             end = new Date(mCursor.getLong(endRowIdx));
         }
-
+        //获取当前日期并转换成毫秒
         Calendar startCal = Calendar.getInstance();
         startCal.setTimeInMillis(mCursor.getLong(startRowIdx));
 
@@ -128,7 +136,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
             Calendar clast = Calendar.getInstance();
             clast.setTimeInMillis(mCursor.getLong(startRowIdx));
             mCursor.moveToNext();
-
+//
             if(clast.get(Calendar.DATE) != startCal.get(Calendar.DATE)) {
                 showHeader = true;
             }
@@ -136,20 +144,23 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
         if(showHeader){
             SettingsActivity.updateLanguage(mContext.getResources());
             Calendar now = Calendar.getInstance();
-            if(now.get(Calendar.DATE) == startCal.get(Calendar.DATE)){
-                header = mContext.getResources().getString(R.string.today);
-            }else if(now.get(Calendar.DATE) - startCal.get(Calendar.DATE) == 1){
-                header = mContext.getResources().getString(R.string.yesterday);
-            }else if(now.get(Calendar.WEEK_OF_YEAR) - startCal.get(Calendar.WEEK_OF_YEAR) == 0){
-                SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
-                header = formatter.format(start);
-            }else if(now.get(Calendar.WEEK_OF_YEAR) - startCal.get(Calendar.WEEK_OF_YEAR) == 1){
-                header = mContext.getResources().getString(R.string.lastWeek);
-                    /* TODO: this is shown for each day last week, which is too much... -> refactor to get rid of showHeader or set it in this if-elsif-chain */
-            }else{
-                SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy");
-                header = formatter.format(start);
-            }
+            //if(now.get(Calendar.DATE) == startCal.get(Calendar.DATE)){
+            //    header = mContext.getResources().getString(R.string.today);
+            //}else if(now.get(Calendar.DATE) - startCal.get(Calendar.DATE) == 1){
+            //    header = mContext.getResources().getString(R.string.yesterday);
+            //}else if(now.get(Calendar.WEEK_OF_YEAR) - startCal.get(Calendar.WEEK_OF_YEAR) == 0){
+            //    SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
+            //    header = formatter.format(start);
+            //}else if(now.get(Calendar.WEEK_OF_YEAR) - startCal.get(Calendar.WEEK_OF_YEAR) == 1){
+            //    header = mContext.getResources().getString(R.string.lastWeek);
+            //        /* TODO: this is shown for each day last week, which is too much... -> refactor to get rid of showHeader or set it in this if-elsif-chain */
+            //}else{
+            //    SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy ");
+            //    header = formatter.format(start);
+            //}
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+            header =formatter.format(start);
+
         }
         if(showHeader) {
             holder.mSeparator.setVisibility(View.VISIBLE);
@@ -163,7 +174,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ActivityDiaryApplication.getAppContext());
         String formatString = sharedPref.getString(SettingsActivity.KEY_PREF_DATETIME_FORMAT,
                 mContext.getResources().getString(R.string.default_datetime_format));
-/* TODO: #36 register listener on preference change to redraw the date time formatting */
+        /* TODO: #36 register listener on preference change to redraw the date time formatting */
 
         holder.mStartLabel.setText(ActivityDiaryApplication.getAppContext().getResources().
                 getString(R.string.history_start, DateFormat.format(formatString, start)));
@@ -187,7 +198,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryView
 
             duration = ActivityDiaryApplication.getAppContext().getResources().
                     getString(R.string.history_end, DateFormat.format(formatString, end),
-                    TimeSpanFormatter.format(end.getTime() - start.getTime()));
+                            TimeSpanFormatter.format(end.getTime() - start.getTime()));
         }
 
         holder.mDurationLabel.setText(duration);

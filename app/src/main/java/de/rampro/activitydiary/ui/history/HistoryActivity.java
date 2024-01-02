@@ -1,23 +1,3 @@
-/*
- * ActivityDiary
- *
- * Copyright (C) 2017-2018 Raphael Mack http://www.raphael-mack.de
- * Copyright (C) 2018 Bc. Ondrej Janitor
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package de.rampro.activitydiary.ui.history;
 
 import android.app.LoaderManager;
@@ -32,23 +12,30 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import de.rampro.activitydiary.ActivityDiaryApplication;
 import de.rampro.activitydiary.R;
@@ -74,7 +61,6 @@ public class HistoryActivity extends BaseActivity implements
             ActivityDiaryContract.Diary.START,
             ActivityDiaryContract.Diary.END,
             ActivityDiaryContract.Diary.NOTE,
-
             ActivityDiaryContract.DiaryActivity.NAME,
             ActivityDiaryContract.DiaryActivity.COLOR
     };
@@ -92,6 +78,10 @@ public class HistoryActivity extends BaseActivity implements
     private DetailRecyclerViewAdapter detailAdapters[];
     private MenuItem searchMenuItem;
     private SearchView searchView;
+
+    private Calendar selectedDate=Calendar.getInstance();
+
+    private CalendarView calendarView;
 
     ContentProviderClient client = ActivityDiaryApplication.getAppContext().getContentResolver().acquireContentProviderClient(ActivityDiaryContract.AUTHORITY);
     ActivityDiaryContentProvider provider = (ActivityDiaryContentProvider) client.getLocalContentProvider();
@@ -168,12 +158,22 @@ public class HistoryActivity extends BaseActivity implements
 
         detailAdapters = new DetailRecyclerViewAdapter[5];
 
+
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View contentView = inflater.inflate(R.layout.activity_history_content, null, false);
 
         setContent(contentView);
-
+        calendarView=(CalendarView)findViewById(R.id.history_calendar);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                String date = year +"."+ (month + 1) +"."+ dayOfMonth;
+                selectedDate.set(year,month,dayOfMonth);
+                filterHistoryDates(date);
+                //Toast.makeText(HistoryActivity.this, "Select date: "+date, Toast.LENGTH_SHORT).show();
+            }
+        });
         RecyclerView historyRecyclerView = (RecyclerView) findViewById(R.id.history_list);
         StaggeredGridLayoutManager detailLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
 
@@ -181,7 +181,7 @@ public class HistoryActivity extends BaseActivity implements
 
         historyRecyclerView.setLayoutManager(detailLayoutManager);
 
-        historyAdapter = new HistoryRecyclerViewAdapter(HistoryActivity.this, this, null);
+        historyAdapter = new HistoryRecyclerViewAdapter(HistoryActivity.this, this, null, selectedDate);
         historyRecyclerView.setAdapter(historyAdapter);
 
         // Prepare the loader.  Either re-connect with an existing one,
@@ -231,6 +231,7 @@ public class HistoryActivity extends BaseActivity implements
 
                 query = data.getPath();
                 query = query.replaceFirst("/","");
+                Log.d("TAG","date: "+query);
                 filterHistoryDates(query);
             }
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -248,7 +249,7 @@ public class HistoryActivity extends BaseActivity implements
 
             getContentResolver().delete(uri,
                     ActivityDiaryContract.DiarySearchSuggestion.SUGGESTION + " LIKE ? AND "
-                    + ActivityDiaryContract.DiarySearchSuggestion.ACTION + " LIKE ?",
+                            + ActivityDiaryContract.DiarySearchSuggestion.ACTION + " LIKE ?",
                     new String[]{query, intent.getAction()});
 
             values.put(ActivityDiaryContract.DiarySearchSuggestion.SUGGESTION, query);
@@ -257,9 +258,9 @@ public class HistoryActivity extends BaseActivity implements
 
             getContentResolver().delete(uri,
                     ActivityDiaryContract.DiarySearchSuggestion._ID +
-                    " IN (SELECT " + ActivityDiaryContract.DiarySearchSuggestion._ID +
-                    " FROM " + ActivityDiaryContract.DiarySearchSuggestion.TABLE_NAME +
-                    " ORDER BY " + ActivityDiaryContract.DiarySearchSuggestion._ID + " DESC LIMIT " + SEARCH_SUGGESTION_DISPLAY_COUNT + ",1)",
+                            " IN (SELECT " + ActivityDiaryContract.DiarySearchSuggestion._ID +
+                            " FROM " + ActivityDiaryContract.DiarySearchSuggestion.TABLE_NAME +
+                            " ORDER BY " + ActivityDiaryContract.DiarySearchSuggestion._ID + " DESC LIMIT " + SEARCH_SUGGESTION_DISPLAY_COUNT + ",1)",
                     null);
         }
     }
@@ -338,7 +339,9 @@ public class HistoryActivity extends BaseActivity implements
     /* show only activities that match date
      */
     private void filterHistoryDates(String date) {
+        Log.d("TAG","in date: "+date);
         Long dateInMilis = checkDateFormatAndParse(date);
+        Log.d("TAG","parsed date: "+dateInMilis);
         if (dateInMilis != null) {
             Bundle args = new Bundle();
             args.putInt("TYPE", SEARCH_TYPE_DATE);

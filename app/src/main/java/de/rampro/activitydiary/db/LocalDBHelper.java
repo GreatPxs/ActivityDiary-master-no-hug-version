@@ -195,7 +195,7 @@ public class LocalDBHelper extends SQLiteOpenHelper {
                 "act_id INTEGER NOT NULL, " +
                 "start INTEGER NOT NULL, " +
                 "'end' INTEGER DEFAULT NULL, " +
-                "note TEXT, " +
+                "note TEXT, " +"weather TEXT,"+"emotion TEXT,"+
                 " FOREIGN KEY(act_id) REFERENCES activity(_id) " +
                 ");");
 

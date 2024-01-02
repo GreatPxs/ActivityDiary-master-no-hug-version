@@ -95,7 +95,9 @@ public class ActivityHelper extends AsyncQueryHandler{
             ActivityDiaryContract.Diary.START,
             ActivityDiaryContract.Diary.END,
             ActivityDiaryContract.Diary.TABLE_NAME + "." + ActivityDiaryContract.Diary._ID,
-            ActivityDiaryContract.Diary.NOTE
+            ActivityDiaryContract.Diary.NOTE,
+            ActivityDiaryContract.Diary.WEATHER,
+            ActivityDiaryContract.Diary.EMOTION
     };
     private static final String[] ACTIVITIES_PROJ = new String[] {
             ActivityDiaryContract.DiaryActivity._ID,
@@ -460,7 +462,8 @@ public class ActivityHelper extends AsyncQueryHandler{
             notificationManager = NotificationManagerCompat.from(ActivityDiaryApplication.getAppContext());
 
             Intent intent = new Intent(ActivityDiaryApplication.getAppContext(), MainActivity.class);
-            @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, 0);
+            @SuppressLint("UnspecifiedImmutableFlag")
+            PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
             notificationBuilder.setContentIntent(pIntent);
             updateNotification();
         }else{
@@ -500,7 +503,8 @@ public class ActivityHelper extends AsyncQueryHandler{
 
                         Intent intent = new Intent(ActivityDiaryApplication.getAppContext(), MainActivity.class);
                         intent.putExtra("SELECT_ACTIVITY_WITH_ID", act.getId());
-                        @SuppressLint("UnspecifiedImmutableFlag") PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, 0);
+                        @SuppressLint("UnspecifiedImmutableFlag")
+                        PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
                         NotificationCompat.Action a = new NotificationCompat.Action(R.drawable.ic_nav_select, coloredActivity, pIntent);
                         a.getExtras().putInt("SELECT_ACTIVITY_WITH_ID", act.getId());
                         notificationBuilder.addAction(a);

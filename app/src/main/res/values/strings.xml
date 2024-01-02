@@ -44,6 +44,8 @@
     <string name="emotionhappy">emotion:Happy</string>
     <string name="emotionsad">emotion:Sad</string>
     <string name="emotionangry">emotion:Angry</string>
+    <string name="chat1">Create conversations with Gemini</string>
+    <string name="chat11">Start by clicking the bottom</string>
     <string name="contributors" translatable="false"><![CDATA[
         <p><a href="https://www.raphael-mack.de">Raphael Mack</a> (developer)</p>
         <p><a href="https://web.facebook.com/profile.php?id=100011025332183">Murtala Umar</a> (Indonesian translation)</p>
@@ -76,7 +78,8 @@
     <string name="nav_activity_manager">Edit Activities</string>
     <string name="action_go">Go</string>
     <string name="action_try">Try it</string>
-
+    <string name="summary1">Summarize your text with Gemini</string>
+    <string name="photo1">Analysis your photo with Gemini</string>
     <!-- Menu strings -->
     <string name="menu_summarize_title">Generate text from text-only input</string>
     <string name="menu_summarize_description">Sample app that summarizes text</string>

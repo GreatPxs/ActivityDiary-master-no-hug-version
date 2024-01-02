@@ -44,9 +44,9 @@ fun MenuScreen(
     onItemClicked: (String) -> Unit = { }
 ) {
     val menuItems = listOf(
-        MenuItem("summarize", R.string.menu_summarize_title, R.string.menu_summarize_description),
-        MenuItem("photo_reasoning", R.string.menu_reason_title, R.string.menu_reason_description),
-        MenuItem("chat", R.string.menu_chat_title, R.string.menu_chat_description)
+        MenuItem("summarize", R.string.summary1,R.string.chat11),
+        MenuItem("photo_reasoning", R.string.photo1, R.string.chat11),
+        MenuItem("chat", R.string.chat1 ,R.string.chat11),
     )
     LazyColumn(
         Modifier
@@ -65,7 +65,7 @@ fun MenuScreen(
                 ) {
                     Text(
                         text = stringResource(menuItem.titleResId),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     Text(
                         text = stringResource(menuItem.descriptionResId),

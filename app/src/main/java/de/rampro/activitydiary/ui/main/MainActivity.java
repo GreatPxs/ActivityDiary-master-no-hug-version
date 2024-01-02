@@ -128,6 +128,7 @@ public class MainActivity extends BaseActivity implements
     private FloatingActionButton chatai;
     private FloatingActionButton emotionangry;
     private FloatingActionButton addfeatures;
+    private FloatingActionButton weatherq;
     private FloatingActionButton fabAttachPicture;
     private FloatingActionButton wea_sunny;
     private FloatingActionButton wea_windy;
@@ -147,6 +148,7 @@ public class MainActivity extends BaseActivity implements
             addfeatures.hide();
             weathernote.hide();
             emotion.hide();
+            weatherq.setVisibility(View.INVISIBLE);
             wea_rainy.setVisibility(View.INVISIBLE);
             wea_sunny.setVisibility(View.INVISIBLE);
             wea_windy.setVisibility(View.INVISIBLE);
@@ -168,7 +170,7 @@ public class MainActivity extends BaseActivity implements
             addfeatures.show();
             weathernote.show();
             emotion.show();
-
+            weatherq.show();
         }
 
     }
@@ -247,6 +249,7 @@ public class MainActivity extends BaseActivity implements
         addfeatures = (FloatingActionButton) findViewById(R.id.char_add);
         emotionangry  = findViewById(R.id.emo_angry );
         emotionhappy  = findViewById(R.id.emo_happy );
+        weatherq = (FloatingActionButton) findViewById(R.id.weatherq);
         emotionsad  = findViewById(R.id.emo_sad );
         emotionchange =findViewById(R.id.emotionchange);
         weatherchange = findViewById(R.id.note_weather1);
@@ -258,6 +261,13 @@ public class MainActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( MainActivity.this, com.google.ai.sample.MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        weatherq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( MainActivity.this, FullscreenActivity.class);
                 startActivity(intent);
             }
         });
@@ -277,6 +287,7 @@ public class MainActivity extends BaseActivity implements
             fabAttachPicture.hide();
             addfeatures.hide();
             emotion.hide();
+            weatherq.hide();
         }
         fabAttachPicture.setOnClickListener(v -> {
             // Handle the click on the FAB
@@ -341,6 +352,7 @@ public class MainActivity extends BaseActivity implements
                 fabNoteEdit.hide();
                 fabAttachPicture.hide();
                 addfeatures.hide();
+                weatherq.hide();
                 emotion.hide();}
         });
         wea_sunny.setOnClickListener(v -> {
@@ -351,6 +363,7 @@ public class MainActivity extends BaseActivity implements
                 viewModel.mNote.setValue(getResources().getString(R.string.weathersunny));
                 dialog.setText(viewModel.mNote.getValue());
 
+
             }else{
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
             }
@@ -358,7 +371,9 @@ public class MainActivity extends BaseActivity implements
         wea_windy.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 if(viewModel.currentActivity() .getValue() != null) {
+                    WeatherEditDialog dialog = new WeatherEditDialog();
                     viewModel.mweather.setValue(getResources().getString(R.string.weatherwindy) );
+                    dialog.setText(viewModel.mweather.getValue());
                 }else{
                     Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
                 }}});
@@ -381,6 +396,7 @@ public class MainActivity extends BaseActivity implements
                 fabNoteEdit.show();
                 fabAttachPicture.show();
                 addfeatures.show();
+                weatherq.show();
                 emotion.show();
 
             }
@@ -395,6 +411,7 @@ public class MainActivity extends BaseActivity implements
                 emotionsad.setVisibility(View.VISIBLE ) ;
                 emotion.setVisibility(View.INVISIBLE);
                 fabNoteEdit.hide();
+                weatherq.hide();
                 fabAttachPicture.hide();
                 addfeatures.hide();
                 weathernote.hide();}
@@ -438,7 +455,7 @@ public class MainActivity extends BaseActivity implements
                 fabAttachPicture.show();
                 addfeatures.show();
                 weathernote.show();
-
+                weatherq.show();
             }
         });
     }

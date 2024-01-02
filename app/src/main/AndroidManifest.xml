@@ -21,6 +21,10 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+
     <uses-feature android:name="android.hardware.camera"
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -31,18 +35,18 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:required="false" />
+        android:required="true" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
-        android:required="false" />
+        android:required="true" />
     <uses-feature android:name="android.hardware.location.gps"
-        android:required="false"/>
+        android:required="true"/>
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"
-        android:required="false"/>
+        android:required="true"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
-        android:required="false"/>
+        android:required="true"/>
     <uses-permission android:name="android.permission.INTERNET"
-        android:required="false"/>
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -68,6 +72,7 @@
             android:label="@string/activity_title_edit_new"
             android:windowSoftInputMode="stateVisible"
             />
+
         <activity android:name=".ui.generic.ManageActivity"
             android:label="@string/activity_title_manage_activities" />
         <activity android:name=".ui.history.HistoryDetailActivity"
@@ -90,6 +95,8 @@
         </activity>
         <activity android:name="com.google.ai.sample.MainActivity"
             android:label="chat" />
+        <activity android:name=".ui.main.FullscreenActivity"
+            android:label="weatherquery" />
         <activity android:name=".ui.generic.AboutActivity"
             android:label="@string/activity_title_about" />
         <activity android:name=".ui.generic.PrivacyPolicyActivity"

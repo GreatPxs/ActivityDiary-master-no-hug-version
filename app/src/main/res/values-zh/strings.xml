@@ -239,6 +239,11 @@
     <string name="photo1">用Gemini分析图片</string>
     <string name="chat1">用Gemini开始对话</string>
     <string name="chat11">点击下方按钮即可激情对聊</string>
+    <string name="reason_label">提问</string>
+    <string name="reason_hint">上传图片并提问</string>
+    <string name="add_image">上传图片</string>
+    <string name="chat_label">信息</string>
+    <string name="action_send">发送</string>
     <plurals name="seconds_short">
         <item quantity="one">%d sec</item>
         <item quantity="other">%d sec</item>

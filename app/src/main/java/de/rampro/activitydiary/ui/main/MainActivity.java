@@ -68,6 +68,25 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.exifinterface.media.ExifInterface;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -219,7 +238,7 @@ public class MainActivity extends BaseActivity implements
             // TODO: get rid of this setting?
             if(PreferenceManager
                     .getDefaultSharedPreferences(ActivityDiaryApplication.getAppContext())
-                    .getBoolean(SettingsActivity.KEY_PREF_DISABLE_CURRENT, true)){
+                    .getBoolean(SettingsActivity.KEY_PREF_DISABLE_CURRENT, true)) {
                 ActivityHelper.helper.setCurrentActivity(null);
             }else{
                 Intent i = new Intent(MainActivity.this, HistoryDetailActivity.class);
@@ -746,6 +765,7 @@ public class MainActivity extends BaseActivity implements
         // setOnSuggestionListener -> for selection of a suggestion
         // setSuggestionsAdapter
         searchView.setOnSearchClickListener(v -> setSearchMode(true));
+
         return true;
     }
 
@@ -756,9 +776,12 @@ public class MainActivity extends BaseActivity implements
                 /* filtering is handled by the SearchView widget
             case R.id.action_filter:
             */
+        } else if (item.getItemId() == R.id.action_section) {
+            startActivityForResult(new Intent(this, SortActivity.class), 123);
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -773,11 +796,12 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    private void filterActivityView(String query){
+    private void filterActivityView(String query) {
+        Log.e("hao", "MainActivity filterActivityView()");
         this.filter = query;
         if(filter.length() == 0){
             likelyhoodSort();
-        }else {
+        } else {
             ArrayList<DiaryActivity> filtered = ActivityHelper.helper.sortedActivities(query);
 
             selectAdapter = new SelectRecyclerViewAdapter(MainActivity.this, filtered);
@@ -863,6 +887,13 @@ public class MainActivity extends BaseActivity implements
                 }
             }
         }
+
+        if (requestCode == 123 && resultCode == 456) {
+//            List<DiaryActivity> activities = ActivityHelper.helper.getActivities();
+//            selectAdapter.setData(activities);
+            selectAdapter = new SelectRecyclerViewAdapter(MainActivity.this, ActivityHelper.helper.getActivities());
+            selectRecyclerView.swapAdapter(selectAdapter, true);
+        }
     }
 
 
@@ -904,7 +935,7 @@ public class MainActivity extends BaseActivity implements
     }
 
 
-    private class MainAsyncQueryHandler extends AsyncQueryHandler{
+    private class MainAsyncQueryHandler extends AsyncQueryHandler {
         public MainAsyncQueryHandler(ContentResolver cr) {
             super(cr);
         }
@@ -932,13 +963,13 @@ public class MainActivity extends BaseActivity implements
                     viewModel.mStartOfLast.setValue(getResources().
                             getString(R.string.last_done_description, DateFormat.format(formatString, start)));
 
-                }else if(token == QUERY_CURRENT_ACTIVITY_TOTAL) {
-                    StatParam p = (StatParam)cookie;
+                } else if (token == QUERY_CURRENT_ACTIVITY_TOTAL) {
+                    StatParam p = (StatParam) cookie;
                     @SuppressLint("Range") long total = cursor.getLong(cursor.getColumnIndex(ActivityDiaryContract.DiaryStats.DURATION));
 
                     String x = DateHelper.dateFormat(p.field).format(p.end);
                     x = x + ": " + TimeSpanFormatter.format(total);
-                    switch(p.field){
+                    switch (p.field) {
                         case Calendar.DAY_OF_YEAR:
                             viewModel.mTotalToday.setValue(x);
                             break;
@@ -957,6 +988,7 @@ public class MainActivity extends BaseActivity implements
     private class StatParam {
         public int field;
         public long end;
+
         public StatParam(int field, long end) {
             this.field = field;
             this.end = end;

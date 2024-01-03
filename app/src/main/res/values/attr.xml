@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--侧滑删除 SwipeMenuLayout-->
+    <declare-styleable name="SwipeMenuLayout">
+        <attr name="swipeEnable" format="boolean"/>
+        <attr name="ios" format="boolean"/>
+        <attr name="leftSwipe" format="boolean"/>
+    </declare-styleable>
+    <!--手写板-->
+    <attr name="SmartDrawingViewStyle" format="reference"/>
+    <declare-styleable name="SmartDrawingView">
+        <attr name="smart_finger_color" format="color"/>
+        <attr name="smart_stroke_width" format="dimension"/>
+    </declare-styleable>
+</resources>

@@ -39,10 +39,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.PreferenceManager;
+
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -76,7 +78,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 /**
  * provide a smooth interface to an OO abstraction of the data for our diary.
  */
-public class ActivityHelper extends AsyncQueryHandler{
+public class ActivityHelper extends AsyncQueryHandler {
     private static final String TAG = ActivityHelper.class.getName();
 
     private static final int QUERY_ALL_ACTIVITIES = 0;
@@ -90,7 +92,7 @@ public class ActivityHelper extends AsyncQueryHandler{
     private static final int REOPEN_LAST_DIARY_ENTRY = 8;
     private static final int UNDELETE_ACTIVITY = 9;
 
-    private static final String[] DIARY_PROJ = new String[] {
+    private static final String[] DIARY_PROJ = new String[]{
             ActivityDiaryContract.Diary.ACT_ID,
             ActivityDiaryContract.Diary.START,
             ActivityDiaryContract.Diary.END,
@@ -138,13 +140,13 @@ public class ActivityHelper extends AsyncQueryHandler{
             // just assume that at least one Condition evaluation is finished and we check
             // whether all are done
             boolean allDone = true;
-            for(Condition c:conditions){
-                if(c.isActive()){
+            for (Condition c : conditions) {
+                if (c.isActive()) {
                     allDone = false;
                     break;
                 }
             }
-            if(allDone) {
+            if (allDone) {
                 reorderActivites();
             }
         }
@@ -162,11 +164,15 @@ public class ActivityHelper extends AsyncQueryHandler{
         return activities;
     }
 
+    public void setActivities(List<DiaryActivity> list) {
+        activities = list;
+    }
+
     /* get a list of the activities as non-modifable copy, not guaranteed to be up to date */
-    public List<DiaryActivity> getUnsortedActivities(){
+    public List<DiaryActivity> getUnsortedActivities() {
         List<DiaryActivity> result = new ArrayList<DiaryActivity>(unsortedActivities.size());
-        synchronized (this){
-            if(unsortedActivities.isEmpty()){
+        synchronized (this) {
+            if (unsortedActivities.isEmpty()) {
                 /* activities not yet loaded, so it doesn't make sense yet to read the activities */
                 try {
                     Thread.sleep(50);
@@ -183,13 +189,13 @@ public class ActivityHelper extends AsyncQueryHandler{
     public void scheduleRefresh() {
         int cycleTime;
         long delta = (new Date().getTime() - mCurrentActivityStartTime.getTime() + 500) / 1000;
-        if(delta <= 15) {
+        if (delta <= 15) {
             cycleTime = 1000 * 10;
-        }else if(delta <= 45){
+        } else if (delta <= 45) {
             cycleTime = 1000 * 20;
-        }else if(delta <= 95){
+        } else if (delta <= 95) {
             cycleTime = 1000 * 60;
-        }else{
+        } else {
             cycleTime = 1000 * 60 * 5; /* 5 min for now. if we want we can make this time configurable in the settings */
         }
         ComponentName componentName = new ComponentName(ActivityDiaryApplication.getAppContext(), RefreshService.class);
@@ -208,14 +214,14 @@ public class ActivityHelper extends AsyncQueryHandler{
     public ArrayList<DiaryActivity> sortedActivities(String query) {
         ArrayList<DiaryActivity> filtered = new ArrayList<DiaryActivity>(ActivityHelper.helper.getActivities().size());
         ArrayList<Integer> filteredDist = new ArrayList<Integer>(ActivityHelper.helper.getActivities().size());
-        for(DiaryActivity a : ActivityHelper.helper.getActivities()){
+        for (DiaryActivity a : ActivityHelper.helper.getActivities()) {
             int dist = ActivityHelper.searchDistance(query, a.getName());
             int pos = 0;
             // search where to enter it
             for(Integer i : filteredDist){
                 if(dist > i.intValue()){
                     pos++;
-                }else{
+                } else {
                     break;
                 }
             }
@@ -225,7 +231,7 @@ public class ActivityHelper extends AsyncQueryHandler{
         return filtered;
     }
 
-    public interface DataChangedListener{
+    public interface DataChangedListener {
         /**
          * Called when the data has changed and no further specification is possible.
          * => everything needs to be refreshed!
@@ -258,18 +264,19 @@ public class ActivityHelper extends AsyncQueryHandler{
         void onActivityOrderChanged();
 
     }
+
     private List<DataChangedListener> mDataChangeListeners;
 
     public void registerDataChangeListener(DataChangedListener listener){
         mDataChangeListeners.add(listener);
     }
 
-    public void unregisterDataChangeListener(DataChangedListener listener){
+    public void unregisterDataChangeListener(DataChangedListener listener) {
         mDataChangeListeners.remove(listener);
     }
 
     /* Access only allowed via ActivityHelper.helper singleton */
-    private ActivityHelper(){
+    private ActivityHelper() {
         super(ActivityDiaryApplication.getAppContext().getContentResolver());
         mDataChangeListeners = new ArrayList<DataChangedListener>(3);
         activities = new ArrayList<DiaryActivity>();
@@ -290,16 +297,13 @@ public class ActivityHelper extends AsyncQueryHandler{
     }
 
     /* reload all the activities from the database */
-    public void reloadAll(){
+    public void reloadAll() {
         ContentResolver resolver = ActivityDiaryApplication.getAppContext().getContentResolver();
         ContentProviderClient client = resolver.acquireContentProviderClient(ActivityDiaryContract.AUTHORITY);
         ActivityDiaryContentProvider provider = (ActivityDiaryContentProvider) client.getLocalContentProvider();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             client.close();
-        }
-        else
-        {
+        } else {
             client.release();
         }
         provider.resetDatabase();
@@ -331,7 +335,7 @@ public class ActivityHelper extends AsyncQueryHandler{
         startQuery(QUERY_CURRENT_ACTIVITY, null, ActivityDiaryContract.Diary.CONTENT_URI,
                 DIARY_PROJ, ActivityDiaryContract.Diary.START + " = (SELECT MAX("
                         + ActivityDiaryContract.Diary.START + ") FROM "
-                        + ActivityDiaryContract.Diary.TABLE_NAME + " WHERE " + SELECTION +")"
+                        + ActivityDiaryContract.Diary.TABLE_NAME + " WHERE " + SELECTION + ")"
                 , null,
                 ActivityDiaryContract.Diary.START + " DESC");
     }
@@ -341,7 +345,7 @@ public class ActivityHelper extends AsyncQueryHandler{
     protected void onQueryComplete(int token, Object cookie,
                                    Cursor cursor) {
         if ((cursor != null) && cursor.moveToFirst()) {
-            if(token == QUERY_ALL_ACTIVITIES) {
+            if (token == QUERY_ALL_ACTIVITIES) {
                 synchronized (this) {
                     activities.clear();
                     unsortedActivities.clear();
@@ -356,16 +360,16 @@ public class ActivityHelper extends AsyncQueryHandler{
                     }
                 }
                 readCurrentActivity();
-                for(DataChangedListener listener : mDataChangeListeners) {
+                for (DataChangedListener listener : mDataChangeListeners) {
                     listener.onActivityDataChanged();
                 }
-            }else if(token == QUERY_CURRENT_ACTIVITY){
-                if(!cursor.isNull(cursor.getColumnIndex(ActivityDiaryContract.Diary.END))){
+            } else if (token == QUERY_CURRENT_ACTIVITY) {
+                if (!cursor.isNull(cursor.getColumnIndex(ActivityDiaryContract.Diary.END))) {
                     /* no current activity */
                     mCurrentNote = "";
                     mCurrentDiaryUri = null;
                     mCurrentActivityStartTime.setTime(cursor.getLong(cursor.getColumnIndex(ActivityDiaryContract.Diary.END)));
-                }else {
+                } else {
                     mCurrentActivity = activityWithId(cursor.getInt(cursor.getColumnIndex(ActivityDiaryContract.Diary.ACT_ID)));
                     mCurrentActivityStartTime.setTime(cursor.getLong(cursor.getColumnIndex(ActivityDiaryContract.Diary.START)));
                     mCurrentNote = cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.NOTE));
@@ -375,17 +379,17 @@ public class ActivityHelper extends AsyncQueryHandler{
                 }
                 showCurrentActivityNotification();
 
-                for(DataChangedListener listener : mDataChangeListeners) {
+                for (DataChangedListener listener : mDataChangeListeners) {
                     listener.onActivityChanged();
                 }
             }else if(token == UNDELETE_ACTIVITY){
 
-                DiaryActivity act = (DiaryActivity)cookie;
+                DiaryActivity act = (DiaryActivity) cookie;
                 act.setColor(cursor.getInt(cursor.getColumnIndex(ActivityDiaryContract.DiaryActivity.COLOR)));
                 act.setName(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.DiaryActivity.NAME)));
                 act.setId(cursor.getInt(cursor.getColumnIndex(ActivityDiaryContract.DiaryActivity._ID)));
 
-                for(DataChangedListener listener : mDataChangeListeners) {
+                for (DataChangedListener listener : mDataChangeListeners) {
                     // notify about the (re-)added activity
                     listener.onActivityAdded(act);
                 }
@@ -397,20 +401,35 @@ public class ActivityHelper extends AsyncQueryHandler{
         }
     }
 
-    public DiaryActivity getCurrentActivity(){
+    public DiaryActivity getCurrentActivity() {
         return mCurrentActivity;
     }
-    public Date getCurrentActivityStartTime() { return mCurrentActivityStartTime;}
-    public String getCurrentNote() { return mCurrentNote;}
-    public String getCurrentWeather() { return mCurrentWeather;}
-    public String getCurrentEmotion() { return mCurrentEmotion;}
-    public void setCurrentNote(String str) { mCurrentNote = str;}
 
-    public void setCurrentActivity(@Nullable DiaryActivity activity){
+    public Date getCurrentActivityStartTime() {
+        return mCurrentActivityStartTime;
+    }
+
+    public String getCurrentNote() {
+        return mCurrentNote;
+    }
+
+    public String getCurrentWeather() {
+        return mCurrentWeather;
+    }
+
+    public String getCurrentEmotion() {
+        return mCurrentEmotion;
+    }
+
+    public void setCurrentNote(String str) {
+        mCurrentNote = str;
+    }
+
+    public void setCurrentActivity(@Nullable DiaryActivity activity) {
         /* update the current diary entry to "finish" it
          * in theory there should be only one entry with end = NULL in the diary table
          * but who knows? -> Let's update all. */
-        if(mCurrentActivity != activity) {
+        if (mCurrentActivity != activity) {
             ContentValues values = new ContentValues();
             Long timestamp = System.currentTimeMillis();
             values.put(ActivityDiaryContract.Diary.END, timestamp);
@@ -422,9 +441,9 @@ public class ActivityHelper extends AsyncQueryHandler{
             mCurrentDiaryUri = null;
             mCurrentActivityStartTime.setTime(timestamp);
             mCurrentNote = "";
-            if(mCurrentActivity == null){
+            if (mCurrentActivity == null) {
                 // activity terminated, so we have to notify here...
-                for(DataChangedListener listener : mDataChangeListeners) {
+                for (DataChangedListener listener : mDataChangeListeners) {
                     listener.onActivityChanged();
                 }
             }
@@ -434,7 +453,7 @@ public class ActivityHelper extends AsyncQueryHandler{
     }
 
     public void showCurrentActivityNotification() {
-        if(PreferenceManager
+        if (PreferenceManager
                 .getDefaultSharedPreferences(ActivityDiaryApplication.getAppContext())
                 .getBoolean(SettingsActivity.KEY_PREF_NOTIF_SHOW_CUR_ACT, true)
                 && mCurrentActivity != null) {
@@ -442,7 +461,7 @@ public class ActivityHelper extends AsyncQueryHandler{
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 col = ActivityDiaryApplication.getAppContext().getResources().getColor(R.color.colorPrimary, null);
-            }else {
+            } else {
                 col = ActivityDiaryApplication.getAppContext().getResources().getColor(R.color.colorPrimary);
             }
             notificationBuilder =
@@ -468,8 +487,8 @@ public class ActivityHelper extends AsyncQueryHandler{
             PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
             notificationBuilder.setContentIntent(pIntent);
             updateNotification();
-        }else{
-            if(notificationManager != null) {
+        } else {
+            if (notificationManager != null) {
                 notificationManager.cancel(CURRENT_ACTIVITY_NOTIFICATION_ID);
             }
             notificationBuilder = null;
@@ -477,24 +496,24 @@ public class ActivityHelper extends AsyncQueryHandler{
     }
 
     @SuppressLint("RestrictedApi")
-    public void updateNotification(){
+    public void updateNotification() {
         String duration = ActivityDiaryApplication.getAppContext().getResources().
                 getString(R.string.duration_description, TimeSpanFormatter.fuzzyFormat(ActivityHelper.helper.getCurrentActivityStartTime(), new Date()));
 
-        if(notificationBuilder != null) {
+        if (notificationBuilder != null) {
             // if this comes faster than building the first notification we just ignore the update.
             // also in case the notification is disabled in the settings notificationBuilder is null
             boolean needUpdate = false;
             int idx = 0;
-            for(NotificationCompat.Action a: notificationBuilder.mActions){
-                if(notificationBuilder.mActions.size() - idx - 1 < activities.size()
+            for (NotificationCompat.Action a : notificationBuilder.mActions) {
+                if (notificationBuilder.mActions.size() - idx - 1 < activities.size()
                         &&
                         activities.get(notificationBuilder.mActions.size() - idx - 1).getId() != a.getExtras().getInt("SELECT_ACTIVITY_WITH_ID")) {
                     needUpdate = true;
                 }
                 idx++;
             }
-            if(needUpdate || notificationBuilder.mActions.size() < 1) {
+            if (needUpdate || notificationBuilder.mActions.size() < 1) {
                 notificationBuilder.mActions.clear();
 
                 for (int i = 2; i >= 0; i--) {
@@ -505,10 +524,8 @@ public class ActivityHelper extends AsyncQueryHandler{
 
                         Intent intent = new Intent(ActivityDiaryApplication.getAppContext(), MainActivity.class);
                         intent.putExtra("SELECT_ACTIVITY_WITH_ID", act.getId());
-
                         @SuppressLint("UnspecifiedImmutableFlag")
                         PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
-
                         NotificationCompat.Action a = new NotificationCompat.Action(R.drawable.ic_nav_select, coloredActivity, pIntent);
                         a.getExtras().putInt("SELECT_ACTIVITY_WITH_ID", act.getId());
                         notificationBuilder.addAction(a);
@@ -524,7 +541,7 @@ public class ActivityHelper extends AsyncQueryHandler{
      *
      * */
     public void undoLastActivitySelection() {
-        if(mCurrentActivity != null) {
+        if (mCurrentActivity != null) {
             startDelete(DELETE_LAST_DIARY_ENTRY, null,
                     ActivityDiaryContract.Diary.CONTENT_URI,
                     ActivityDiaryContract.Diary.END + " is NULL",
@@ -534,26 +551,26 @@ public class ActivityHelper extends AsyncQueryHandler{
 
     @Override
     protected void onUpdateComplete(int token, Object cookie, int result) {
-        if(token == UPDATE_CLOSE_ACTIVITY) {
-            if(mCurrentActivity != null) {
+        if (token == UPDATE_CLOSE_ACTIVITY) {
+            if (mCurrentActivity != null) {
                 /* create a new diary entry */
                 ContentValues values = new ContentValues();
 
                 values.put(ActivityDiaryContract.Diary.ACT_ID, mCurrentActivity.getId());
-                values.put(ActivityDiaryContract.Diary.START, (Long)cookie);
+                values.put(ActivityDiaryContract.Diary.START, (Long) cookie);
 
                 startInsert(INSERT_NEW_DIARY_ENTRY, cookie, ActivityDiaryContract.Diary.CONTENT_URI,
                         values);
             }
-        }else if(token == UPDATE_ACTIVITY){
-            for(DataChangedListener listener : mDataChangeListeners) {
-                listener.onActivityDataChanged((DiaryActivity)cookie);
+        } else if (token == UPDATE_ACTIVITY) {
+            for (DataChangedListener listener : mDataChangeListeners) {
+                listener.onActivityDataChanged((DiaryActivity) cookie);
             }
         }else if(token == REOPEN_LAST_DIARY_ENTRY){
             mCurrentActivity = null;
             readCurrentActivity();
-        }else if(token == UNDELETE_ACTIVITY){
-            DiaryActivity act = (DiaryActivity)cookie;
+        } else if (token == UNDELETE_ACTIVITY) {
+            DiaryActivity act = (DiaryActivity) cookie;
 
             startQuery(UNDELETE_ACTIVITY, cookie,
                     ActivityDiaryContract.DiaryActivity.CONTENT_URI,
@@ -566,7 +583,7 @@ public class ActivityHelper extends AsyncQueryHandler{
 
     @Override
     protected void onDeleteComplete(int token, Object cookie, int result) {
-        if(token == DELETE_LAST_DIARY_ENTRY){
+        if (token == DELETE_LAST_DIARY_ENTRY) {
             ContentValues values = new ContentValues();
             values.putNull(ActivityDiaryContract.Diary.END);
 
@@ -581,7 +598,7 @@ public class ActivityHelper extends AsyncQueryHandler{
 
     @Override
     protected void onInsertComplete(int token, Object cookie, Uri uri) {
-        if(token == INSERT_NEW_DIARY_ENTRY){
+        if (token == INSERT_NEW_DIARY_ENTRY) {
             mCurrentDiaryUri = uri;
             for(DataChangedListener listener : mDataChangeListeners) {
                 listener.onActivityChanged();
@@ -589,18 +606,18 @@ public class ActivityHelper extends AsyncQueryHandler{
 
         }else if(token == INSERT_NEW_ACTIVITY){
 
-            DiaryActivity act = (DiaryActivity)cookie;
+            DiaryActivity act = (DiaryActivity) cookie;
             act.setId(Integer.parseInt(uri.getLastPathSegment()));
             synchronized (this) {
                 activities.add(act);
                 unsortedActivities.add(act);
             }
-            for(DataChangedListener listener : mDataChangeListeners) {
+            for (DataChangedListener listener : mDataChangeListeners) {
                 listener.onActivityAdded(act);
             }
             if(PreferenceManager
                     .getDefaultSharedPreferences(ActivityDiaryApplication.getAppContext())
-                    .getBoolean(SettingsActivity.KEY_PREF_AUTO_SELECT, true)){
+                    .getBoolean(SettingsActivity.KEY_PREF_AUTO_SELECT, true)) {
                 setCurrentActivity(act);
             }
         }
@@ -614,13 +631,13 @@ public class ActivityHelper extends AsyncQueryHandler{
                 null,
                 null);
 
-        for(DataChangedListener listener : mDataChangeListeners) {
+        for (DataChangedListener listener : mDataChangeListeners) {
             listener.onActivityDataChanged(act);
         }
     }
 
     /* undelete an activity with given ID */
-    public DiaryActivity undeleteActivity(int id, String name){
+    public DiaryActivity undeleteActivity(int id, String name) {
         DiaryActivity result = new DiaryActivity(id, name, 0);
         ContentValues values = new ContentValues();
         values.put(ActivityDiaryContract.Diary._DELETED, 0);
@@ -634,7 +651,7 @@ public class ActivityHelper extends AsyncQueryHandler{
     }
 
     /* inserts a new activity and sets it as the current one if configured in the preferences */
-    public void insertActivity(DiaryActivity act){
+    public void insertActivity(DiaryActivity act) {
         startInsert(INSERT_NEW_ACTIVITY,
                 act,
                 ActivityDiaryContract.DiaryActivity.CONTENT_URI,
@@ -642,7 +659,7 @@ public class ActivityHelper extends AsyncQueryHandler{
     }
 
     public void deleteActivity(DiaryActivity act) {
-        if(act == mCurrentActivity){
+        if (act == mCurrentActivity) {
             setCurrentActivity(null);
         }
         ContentValues values = new ContentValues();
@@ -657,19 +674,19 @@ public class ActivityHelper extends AsyncQueryHandler{
         synchronized (this) {
             if (activities.remove(act)) {
                 unsortedActivities.remove(act);
-            }else{
+            } else {
                 Log.e(TAG, "removal of activity " + act.toString() + " failed");
             }
         }
-        for(DataChangedListener listener : mDataChangeListeners) {
+        for (DataChangedListener listener : mDataChangeListeners) {
             listener.onActivityRemoved(act);
         }
     }
 
-    public DiaryActivity activityWithId(int id){
+    public DiaryActivity activityWithId(int id) {
         /* TODO improve performance by storing the DiaryActivities in a map or Hashtable instead of a list */
         synchronized (this) {
-            if(unsortedActivities.isEmpty()){
+            if (unsortedActivities.isEmpty()) {
                 /* activities not yet loaded, so it doesn't make sense yet to read the activities */
                 try {
                     Thread.sleep(50);
@@ -686,14 +703,14 @@ public class ActivityHelper extends AsyncQueryHandler{
         return null;
     }
 
-    private ContentValues contentFor(DiaryActivity act){
+    private ContentValues contentFor(DiaryActivity act) {
         ContentValues result = new ContentValues();
         result.put(ActivityDiaryContract.DiaryActivity.NAME, act.getName());
         result.put(ActivityDiaryContract.DiaryActivity.COLOR, act.getColor());
         return result;
     }
 
-    public @Nullable Uri getCurrentDiaryUri(){
+    public @Nullable Uri getCurrentDiaryUri() {
         return mCurrentDiaryUri;
     }
 
@@ -724,36 +741,38 @@ public class ActivityHelper extends AsyncQueryHandler{
             newcost[0] = j;
 
             // transformation cost for each letter in s0
-            for(int i = 1; i < len0; i++) {
+            for (int i = 1; i < len0; i++) {
                 // matching current letters in both strings
                 int match = (search.charAt(i - 1) == model.charAt(j - 1)) ? 0 : 1;
 
                 // computing cost for each transformation
                 int cost_replace = cost[i - 1] + match;
-                int cost_insert  = cost[i] + 1;
-                int cost_delete  = newcost[i - 1] + 1;
+                int cost_insert = cost[i] + 1;
+                int cost_delete = newcost[i - 1] + 1;
 
                 // keep minimum cost
                 newcost[i] = Math.min(Math.min(cost_insert, cost_delete), cost_replace);
             }
 
             // swap cost/newcost arrays
-            int[] swap = cost; cost = newcost; newcost = swap;
+            int[] swap = cost;
+            cost = newcost;
+            newcost = swap;
         }
 
         // the distance is the cost for transforming all letters in both strings
         result = cost[len0 - 1];
 
         // we want to give some preference for true substrings and character occurrences
-        if(model.contains(search)){
+        if (model.contains(search)) {
             result = result - 30;
         }
-        if(model.startsWith(search)){
+        if (model.startsWith(search)) {
             result = result - 10;
         }
-        for(int i = 0; i < search.length(); i++){
+        for (int i = 0; i < search.length(); i++) {
             int idx = model.indexOf(search.charAt(i));
-            if(idx < 0){
+            if (idx < 0) {
                 result = result + 4;
             }
         }
@@ -766,17 +785,19 @@ public class ActivityHelper extends AsyncQueryHandler{
             c.refresh();
         }
     }
+
     /* is one of the conditions currently evaluating? */
     private boolean reorderingInProgress;
     private HashMap<DiaryActivity, Double> likeliActivites = new HashMap<>(1);
-    public double likelihoodFor(DiaryActivity a){
-        if(likeliActivites.containsKey(a)){
+
+    public double likelihoodFor(DiaryActivity a) {
+        if (likeliActivites.containsKey(a)) {
             return likeliActivites.get(a);
         }
         return 0.0;
     }
 
-    public void reorderActivites(){
+    public void reorderActivites() {
         synchronized (this) {
             List<DiaryActivity> as = activities;
             likeliActivites = new HashMap<>(as.size());
@@ -813,7 +834,7 @@ public class ActivityHelper extends AsyncQueryHandler{
 
             reorderingInProgress = false;
         }
-        for(DataChangedListener listener : mDataChangeListeners) {
+        for (DataChangedListener listener : mDataChangeListeners) {
             listener.onActivityOrderChanged();
         }
         updateNotification();
@@ -830,7 +851,7 @@ public class ActivityHelper extends AsyncQueryHandler{
     }
 
     /* perform cyclic actions like update of timing on current activity and checking time based Conditions */
-    public void cyclicUpdate(){
+    public void cyclicUpdate() {
         // TODO add a service like RefreshService, to call this with configurable cycle time
     }
 }

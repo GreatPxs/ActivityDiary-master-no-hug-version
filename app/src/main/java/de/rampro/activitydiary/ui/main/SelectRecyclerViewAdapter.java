@@ -19,10 +19,11 @@
 
 package de.rampro.activitydiary.ui.main;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -86,5 +87,10 @@ public class SelectRecyclerViewAdapter extends RecyclerView.Adapter<SelectViewHo
 
     public DiaryActivity item(int id){
         return mActivityList.get(id);
+    }
+
+    public void setData(List<DiaryActivity> fruitList){
+        mActivityList = fruitList;
+        notifyDataSetChanged();
     }
 }

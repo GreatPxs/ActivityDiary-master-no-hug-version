@@ -53,6 +53,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -106,9 +107,10 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
     private CardView mActivityCard;
     private TextView mActivityName;
     private CheckBox mAdjustAdjacent;
-    private Button mStartDate, mEndDate, mStartTime, mEndTime;
+    private Button mStartDate, mEndDate, mStartTime, mEndTime, mNotification;
     private Calendar start, storedStart;
     private Calendar end, storedEnd;
+    private Calendar now;
 
     private EditText mNote;
     private EditText mWeather;
@@ -248,6 +250,9 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
         if(updateValues.containsKey(ActivityDiaryContract.Diary.END)) {
             end.setTimeInMillis(updateValues.getAsLong(ActivityDiaryContract.Diary.END));
         }
+        if (now.compareTo(start)==-1){
+            mNotification.setEnabled(true);
+        }
         updateDateTimes();
     }
 
@@ -303,8 +308,18 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
         mEndDate = (Button)contentView.findViewById(R.id.date_end);
         mStartTime = (Button)contentView.findViewById(R.id.time_start);
         mEndTime = (Button)contentView.findViewById(R.id.time_end);
+        mNotification=(Button)contentView.findViewById(R.id.button_notification);
+        mNotification.setEnabled(false);
+        mNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO:notification set
+                Toast.makeText(HistoryDetailActivity.this, "Notice set!", Toast.LENGTH_SHORT).show();
+            }
+        });
         start = Calendar.getInstance();
         end = Calendar.getInstance();
+        now = Calendar.getInstance();
         mTimeError = (TextView) contentView.findViewById(R.id.time_error);
 
         detailRecyclerView = (RecyclerView)findViewById(R.id.picture_recycler);

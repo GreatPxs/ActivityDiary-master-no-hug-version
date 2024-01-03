@@ -8,7 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
-
+    <style name="MySpinnerItemStyle">
+        <item name="android:textSize">40sp</item>
+    </style>
     <style name="DetailTabLayout" parent="Base.Widget.Design.TabLayout">
         <item name="tabMaxWidth">@dimen/design_tab_max_width</item>
         <item name="tabIndicatorColor">@color/colorGreyTextSelected</item>

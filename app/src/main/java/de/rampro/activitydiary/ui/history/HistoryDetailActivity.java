@@ -91,6 +91,7 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
             ActivityDiaryContract.DiaryActivity.TABLE_NAME + "." + ActivityDiaryContract.DiaryActivity.COLOR,
             ActivityDiaryContract.Diary.TABLE_NAME + "." + ActivityDiaryContract.Diary._ID,
             ActivityDiaryContract.Diary.NOTE,
+
             ActivityDiaryContract.Diary.START,
             ActivityDiaryContract.Diary.END};
 
@@ -128,7 +129,7 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
         private TimePickerDialog.OnTimeSetListener listener;
 
         public void setData(TimePickerDialog.OnTimeSetListener listener,
-                           int hour, int minute){
+                            int hour, int minute){
             this.hour = hour;
             this.minute = minute;
             this.listener = listener;
@@ -194,12 +195,12 @@ public class HistoryDetailActivity extends BaseActivity implements LoaderManager
                             mNote.setText(cursor.getString(cursor.getColumnIndex(ActivityDiaryContract.Diary.NOTE)));
                         }
                         mActivityName.setText(
-                            cursor.getString(
-                                cursor.getColumnIndex(
-                                    ActivityDiaryContract.DiaryActivity.NAME)));
+                                cursor.getString(
+                                        cursor.getColumnIndex(
+                                                ActivityDiaryContract.DiaryActivity.NAME)));
 
                         mBackground.setBackgroundColor(cursor.getInt(cursor.getColumnIndex(
-                                    ActivityDiaryContract.DiaryActivity.COLOR)));
+                                ActivityDiaryContract.DiaryActivity.COLOR)));
 
                         if(diaryEntryID == -1){
                             diaryEntryID = cursor.getLong(cursor.getColumnIndex(ActivityDiaryContract.Diary._ID));

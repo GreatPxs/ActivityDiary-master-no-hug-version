@@ -357,16 +357,17 @@ public class MainActivity extends BaseActivity implements
         });
         wea_sunny.setOnClickListener(v -> {
 
-             if(viewModel.currentActivity().getValue() != null) {
-                    viewModel.mweather.setValue(getResources().getString(R.string.weathersunny) );
-                 WeatherEditDialog dialog = new WeatherEditDialog();
-                 viewModel.mweather.setValue(getResources().getString(R.string.weathersunny));
-                 dialog.setText(viewModel.mweather.getValue());
+            if(viewModel.currentActivity().getValue() != null) {
+                viewModel.mweather.setValue(getResources().getString(R.string.weathersunny) );
+                NoteEditDialog dialog = new NoteEditDialog();
+                viewModel.mNote.setValue(getResources().getString(R.string.weathersunny));
+                dialog.setText(viewModel.mNote.getValue());
 
-                }else{
-                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
-                }
-            });
+
+            }else{
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.no_active_activity_error), Toast.LENGTH_LONG).show();
+            }
+        });
         wea_windy.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 if(viewModel.currentActivity() .getValue() != null) {
@@ -610,7 +611,7 @@ public class MainActivity extends BaseActivity implements
                             ActivityDiaryContract.DiaryActivity.X_START_OF_LAST
                     },
                     ActivityDiaryContract.DiaryActivity._DELETED + " = 0 AND "
-                    + ActivityDiaryContract.DiaryActivity._ID + " = ?",
+                            + ActivityDiaryContract.DiaryActivity._ID + " = ?",
                     new String[] {
                             Integer.toString(newAct.getId())
                     },

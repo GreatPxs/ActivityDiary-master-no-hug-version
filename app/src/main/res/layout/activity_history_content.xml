@@ -25,6 +25,11 @@
     android:layout_height="match_parent"
     >
 
+    <CalendarView
+        android:id="@+id/history_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_list"
         android:layout_width="match_parent"

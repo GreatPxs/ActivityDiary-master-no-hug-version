@@ -66,6 +66,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
         <activity android:name=".ui.generic.EditActivity"
@@ -80,6 +81,7 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="false"
             />
+
         <activity android:name=".ui.history.HistoryActivity"
             android:label="@string/activity_title_history"
             android:launchMode="singleTop"

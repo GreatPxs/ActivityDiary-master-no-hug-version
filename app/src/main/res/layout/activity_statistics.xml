@@ -40,6 +40,12 @@
             android:id="@+id/piechart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="3"/>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barchart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"/>
 
         <LinearLayout

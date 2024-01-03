@@ -462,6 +462,8 @@ public class ActivityHelper extends AsyncQueryHandler{
             notificationManager = NotificationManagerCompat.from(ActivityDiaryApplication.getAppContext());
 
             Intent intent = new Intent(ActivityDiaryApplication.getAppContext(), MainActivity.class);
+
+
             @SuppressLint("UnspecifiedImmutableFlag")
             PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
             notificationBuilder.setContentIntent(pIntent);
@@ -503,8 +505,10 @@ public class ActivityHelper extends AsyncQueryHandler{
 
                         Intent intent = new Intent(ActivityDiaryApplication.getAppContext(), MainActivity.class);
                         intent.putExtra("SELECT_ACTIVITY_WITH_ID", act.getId());
+
                         @SuppressLint("UnspecifiedImmutableFlag")
                         PendingIntent pIntent = PendingIntent.getActivity(ActivityDiaryApplication.getAppContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
+
                         NotificationCompat.Action a = new NotificationCompat.Action(R.drawable.ic_nav_select, coloredActivity, pIntent);
                         a.getExtras().putInt("SELECT_ACTIVITY_WITH_ID", act.getId());
                         notificationBuilder.addAction(a);

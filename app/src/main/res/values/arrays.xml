@@ -53,6 +53,7 @@
         <item>深圳</item>
         <item>西安</item>
         <item>武汉</item>
+        <item>昆明</item>
     </string-array>
     <string-array name="pref_location_setting_list" translatable="true">
         <item>OFF</item>

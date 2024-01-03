@@ -38,11 +38,19 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -75,6 +83,7 @@ public class StatisticsActivity extends BaseActivity implements LoaderManager.Lo
             ActivityDiaryContract.DiaryStats.EMOTION
     };
     private PieChart chart;
+    private BarChart barChart;
 
     private Spinner timeframeSpinner;
 
@@ -107,6 +116,8 @@ public class StatisticsActivity extends BaseActivity implements LoaderManager.Lo
 
         getLoaderManager().initLoader(LOADER_ID_TIME, null, this);
         chart = (PieChart) findViewById(R.id.piechart);
+        barChart=(BarChart)findViewById(R.id.barchart);
+        initBarChar();
         chart.getLegend().setEnabled(false);
         chart.setDescription(null);
         chart.setHoleRadius(30.0f);
@@ -169,39 +180,50 @@ public class StatisticsActivity extends BaseActivity implements LoaderManager.Lo
         // old cursor once we return.)
 
         List<PieEntry> entries = new ArrayList<>();
+        List<BarEntry> bentries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
         int portion_idx = data.getColumnIndex(ActivityDiaryContract.DiaryStats.PORTION);
         int name_idx = data.getColumnIndex(ActivityDiaryContract.DiaryStats.NAME);
         int col_idx = data.getColumnIndex(ActivityDiaryContract.DiaryStats.COLOR);
         int dur_idx = data.getColumnIndex(ActivityDiaryContract.DiaryStats.DURATION);
+        int i = 0 ;
 
         if ((data != null) && data.moveToFirst()) {
             float acc = 0.0f;
             float acc_po = 0.0f;
+
             while (!data.isAfterLast()) {
                 float portion = data.getFloat(portion_idx);
                 long duration = data.getLong(dur_idx);
                 if(portion > 3.0f){
                     PieEntry ent = new PieEntry((float)duration, data.getString(name_idx));
+                    BarEntry bent = new BarEntry(i,(float)duration/1000);
                     entries.add(ent);
+                    bentries.add(bent);
                     colors.add(data.getInt(col_idx));
                 }else{
                     // accumulate the small, not shown entries
                     acc += duration;
                     acc_po += portion;
-                }
+                }i++;
                 data.moveToNext();
             }
             if(acc_po > 2.0f) {
                 entries.add(new PieEntry(acc, getResources().getString(R.string.statistics_others)));
+                bentries.add(new BarEntry(i,acc));
                 colors.add(Color.GRAY);
             }
+
         }
 
         PieDataSet set = new PieDataSet(entries, getResources().getString(R.string.activities));
+        BarDataSet bset = new BarDataSet(bentries,getResources().getString(R.string.activities));
         PieData dat = new PieData(set);
+        BarData bdat=new BarData(bset);
+        bdat.setBarWidth(0.5f);
         set.setColors(colors);
+        bset.setColors(colors);
 
         set.setValueFormatter(new IValueFormatter() {
             @Override
@@ -210,10 +232,21 @@ public class StatisticsActivity extends BaseActivity implements LoaderManager.Lo
                 return TimeSpanFormatter.format((long)e.getValue());
             }
         });
+        bset.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                BarEntry e =(BarEntry) entry;
+                return TimeSpanFormatter.format((long)e.getY());
+            }
+        });
+
+
         chart.setData(dat);
+        barChart.setData(bdat);
         chart.setUsePercentValues(true);
         chart.setRotationAngle(180.0f);
         chart.invalidate(); // refresh
+        barChart.invalidate();
 
     }
 
@@ -326,5 +359,40 @@ public class StatisticsActivity extends BaseActivity implements LoaderManager.Lo
                             }
                 , date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
         newFragment.show(getSupportFragmentManager(), "startDatePicker");
+    }
+
+    public void initBarChar(){
+        barChart.setDrawBorders(false);
+        barChart.setDrawGridBackground(false);
+        barChart.setDrawBarShadow(false);
+        barChart.getDescription().setEnabled(false);
+        barChart.setPinchZoom(false);
+        barChart.getLegend().setEnabled(false);
+
+        XAxis xAxis = barChart.getXAxis();
+        YAxis leftAxis = barChart.getAxisLeft();
+        YAxis rightAxis = barChart.getAxisRight();
+
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return "";
+            }
+        });
+        leftAxis.setDrawAxisLine(false);
+        leftAxis.enableAxisLineDashedLine(10f,10f,10f);
+        leftAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return Integer.toString((int)value/1000);
+            }
+        });
+        rightAxis.setDrawAxisLine(false);
+
+        rightAxis.setEnabled(false);
+
     }
 }

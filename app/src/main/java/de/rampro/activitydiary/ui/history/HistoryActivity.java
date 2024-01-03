@@ -360,9 +360,9 @@ public class HistoryActivity extends BaseActivity implements
     /* show only activities that match date
      */
     private void filterHistoryDates(String date) {
-        Log.d("TAG","in date: "+date);
+        //Log.d("TAG","in date: "+date);
         Long dateInMilis = checkDateFormatAndParse(date);
-        Log.d("TAG","parsed date: "+dateInMilis);
+        //Log.d("TAG","parsed date: "+dateInMilis);
         if (dateInMilis != null) {
             Bundle args = new Bundle();
             args.putInt("TYPE", SEARCH_TYPE_DATE);

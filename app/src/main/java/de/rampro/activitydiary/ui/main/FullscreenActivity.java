@@ -142,12 +142,16 @@ public class FullscreenActivity extends AppCompatActivity {
                     Cid = "101270101";
                     queryWeather();
                 }
+                if ("昆明".equals(selectedCity)) {
+                    Cid = "101290101";
+                    queryWeather();
+                }
                 if ("重庆".equals(selectedCity)) {
                     Cid = "101040100";
                     queryWeather();
                 }
                 if ("深圳".equals(selectedCity)) {
-                    Cid = "10128060";
+                    Cid = "101280601";
                     queryWeather();
                 }
                 if ("西安".equals(selectedCity)) {
@@ -286,7 +290,7 @@ public class FullscreenActivity extends AppCompatActivity {
                     // Handle the case where the status is not OK here...
                 }
             }
-            });
+        });
     }
 
     ;

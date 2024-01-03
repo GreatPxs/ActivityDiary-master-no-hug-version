@@ -576,12 +576,14 @@ public class MainActivity extends BaseActivity implements
                 fabAttachPicture.hide();
                 addfeatures.hide();
                 emotion.hide();
+                weatherq.hide();
             }
             if(emotionchange.getVisibility()== View.VISIBLE){
                 weathernote.setVisibility(View.INVISIBLE);
                 fabNoteEdit.hide();
                 fabAttachPicture.hide();
                 addfeatures.hide();
+                weatherq.hide();
             }
 
             SpannableStringBuilder snackbarText = new SpannableStringBuilder();
